@@ -1,8 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>mtgroup.locacao</RootNamespace>
+    <AssemblyName>mtgroup.locacao.core</AssemblyName>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentResults" Version="2.3.0" />
+    <PackageReference Include="LanguageExt.Core" Version="3.4.15" />
+    <PackageReference Include="Nager.Date" Version="1.26.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entidades\" />
+    <Folder Include="PerfilSalas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ag3.Util\Ag3.Util.csproj" />
+  </ItemGroup>
 
 </Project>
