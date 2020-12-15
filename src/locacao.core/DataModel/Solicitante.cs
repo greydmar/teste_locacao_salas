@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using mtgroup.locacao.Interfaces;
@@ -7,21 +9,29 @@ namespace mtgroup.locacao.DataModel
 {
     public class Solicitante: IEntidade, IPrincipal
     {
-        private readonly ClaimsPrincipal _inner;
+        private ClaimsPrincipal _inner;
 
+        private readonly string _name;
+        
         public Solicitante(ClaimsPrincipal principal)
         {
             _inner = principal;
 
-            var cId = principal.FindFirst(ClaimTypes.NameIdentifier);
+            var claimUserId = principal.Claims.FirstOrDefault(claim => claim.Type == ConfigAcessoInfoUsuario.ClaimNames.UserId);
+            var clamUserLogin = principal.Claims.FirstOrDefault(claim => claim.Type == ConfigAcessoInfoUsuario.ClaimNames.UserLogin);
 
-            int id=0;
-            if (cId == null || !int.TryParse(cId.Value, out id))
+            if (claimUserId == null || !int.TryParse(claimUserId.Value, out var userId))
             {
                 throw new ArgumentException("Identidade inválida. Id Solicitante não foi encontrado");
             }
 
-            this.Id = id;
+            if (clamUserLogin == null || string.IsNullOrEmpty(clamUserLogin.Value))
+            {
+                throw new ArgumentException("Identidade inválida. Login do Solicitante não foi encontrado");
+            }
+
+            this.Id = userId;
+            this._name = clamUserLogin.Value;
         }
 
         public Solicitante(string name, int id = 0)
@@ -29,8 +39,8 @@ namespace mtgroup.locacao.DataModel
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException(nameof(name));
 
-            _inner = new GenericPrincipal(new GenericIdentity(name), Array.Empty<string>());
             this.Id = id;
+            this._name = name;
         }
 
         public int Id { get; private set; }
@@ -40,8 +50,29 @@ namespace mtgroup.locacao.DataModel
             return _inner?.IsInRole(role) ?? false;
         }
 
-        public string Name => ((IPrincipal) this).Identity?.Name;
+        public string Name => _name;
 
-        IIdentity? IPrincipal.Identity => _inner.Identity;
+        IIdentity? IPrincipal.Identity => ResolvePrincipal().Identity;
+
+        private ClaimsPrincipal ResolvePrincipal()
+        {
+            if (_inner != null)
+                return _inner;
+
+            lock (this)
+            {
+                var claimUserId = new Claim(ConfigAcessoInfoUsuario.ClaimNames.UserId, Id.ToString("D", CultureInfo.InvariantCulture));
+                var clamUserLogin = new Claim(ConfigAcessoInfoUsuario.ClaimNames.UserLogin, _name);
+
+                _inner = new ClaimsPrincipal(new ClaimsIdentity(new[] {claimUserId, clamUserLogin}));
+            }
+
+            return _inner;
+        }
+        
+        public static explicit operator ClaimsPrincipal(Solicitante self)
+        {
+            return self._inner ?? self.ResolvePrincipal();
+        }
     }
 }

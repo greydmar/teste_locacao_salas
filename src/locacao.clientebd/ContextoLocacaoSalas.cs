@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using locacao.clientebd.DTO;
+﻿using locacao.clientebd.DTO;
 using locacao.clientebd.Mapeamentos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces;
 
