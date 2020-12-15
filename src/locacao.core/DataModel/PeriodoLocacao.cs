@@ -4,28 +4,34 @@ namespace mtgroup.locacao.DataModel
 {
     public class PeriodoLocacao : IEquatable<PeriodoLocacao>
     {
-        public PeriodoLocacao(in DateTime dataInicio, in TimeSpan duracao)
+        public PeriodoLocacao(DateTime inicio, TimeSpan duracao)
         {
-            this.DataInicio = dataInicio;
-            this.Termino = dataInicio + duracao;
+            this.Inicio = inicio;
+            this.Termino = inicio + duracao;
         }
 
-        public DateTime DataInicio { get; }
+        internal PeriodoLocacao(DateTime inicio, DateTime termino)
+        {
+            this.Inicio = inicio;
+            this.Termino = termino;
+        }
+
+        public DateTime Inicio { get; }
 
         public DateTime Termino { get; }
 
-        public long Horas => Convert.ToInt64((Termino - DataInicio).TotalHours);
+        public long Horas => Convert.ToInt64((Termino - Inicio).TotalHours);
 
         public static implicit operator DateTime(PeriodoLocacao periodo)
         {
-            return periodo.DataInicio.Date;
+            return periodo.Inicio.Date;
         }
 
         public bool Equals(PeriodoLocacao other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return DataInicio.Equals(other.DataInicio);
+            return Inicio.Equals(other.Inicio);
         }
 
         public override bool Equals(object obj)
@@ -38,17 +44,17 @@ namespace mtgroup.locacao.DataModel
 
         public override int GetHashCode()
         {
-            return DataInicio.GetHashCode();
+            return Inicio.GetHashCode();
         }
 
         public static bool operator <(PeriodoLocacao left, TimeSpan right)
         {
-            return (left.Termino - left.DataInicio) < right;
+            return (left.Termino - left.Inicio) < right;
         }
 
         public static bool operator >(PeriodoLocacao left, TimeSpan right)
         {
-            return (left.Termino - left.DataInicio) > right;
+            return (left.Termino - left.Inicio) > right;
         }
 
         public static bool operator ==(PeriodoLocacao left, PeriodoLocacao right)
@@ -63,7 +69,7 @@ namespace mtgroup.locacao.DataModel
 
         public bool FinalNoMesmoDia()
         {
-            return this.DataInicio.Date.Equals(this.Termino.Date);
+            return this.Inicio.Date.Equals(this.Termino.Date);
         }
     }
 }

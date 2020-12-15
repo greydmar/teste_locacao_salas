@@ -1,4 +1,6 @@
-using locacao.tests.DataContext.Repositorios;
+using locacao.clientebd;
+using locacao.tests.DataContext;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using mtgroup.locacao.Interfaces.Repositorios;
 using mtgroup.locacao.Interfaces.Servicos;
@@ -13,6 +15,8 @@ namespace locacao.tests
             services.AddSingleton<IServicoDataHora, ServicoDataHora>();
             services.AddScoped<IConsultaReservas>(ConfiguracaoRepositorios.ConsultaReservas);
             services.AddScoped<IValidacaoRequisicao, ServicoValidacaoRequisicao>();
+            
+            //services.AddDbContext<ContextoLocacaoSalas>(s=> s.UseSqlite())
         }
     }
 }

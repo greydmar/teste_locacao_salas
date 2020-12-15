@@ -1,10 +1,9 @@
 ﻿using System;
-using locacao.tests.DadosMock;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces.Repositorios;
 using NSubstitute;
 
-namespace locacao.tests.DataContext.Repositorios
+namespace locacao.tests.DataContext
 {
     internal static class ConfiguracaoRepositorios
     {
@@ -20,14 +19,6 @@ namespace locacao.tests.DataContext.Repositorios
                     return AuxiliarDados.ExistePerfilSala(req);
                 });
             
-            //instance
-            //    .ExisteSala(Arg.Any<RequisicaoSalaReuniao>())
-            //    .ReturnsForAnyArgs(callInfo =>
-            //    {
-            //        var req = callInfo.Arg<RequisicaoSalaReuniao>();
-            //        return AuxiliarDados.ExisteSalaDisponivel(req);
-            //    });
-                
             return instance;
         }
     }

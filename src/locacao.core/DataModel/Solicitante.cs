@@ -2,13 +2,19 @@
 
 namespace mtgroup.locacao.DataModel
 {
-    public class Solicitante: IPrincipal
+    public class Solicitante: IPrincipal, IIdentity
     {
         public bool IsInRole(string role)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
-        public IIdentity? Identity { get; }
+        IIdentity? IPrincipal.Identity => this;
+
+        public string? AuthenticationType { get; set; }
+        
+        public bool IsAuthenticated { get; set; }
+        
+        public string? Name { get; set; }
     }
 }

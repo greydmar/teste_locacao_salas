@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Ag3.Util.Suporte;
 using FluentResults;
@@ -84,7 +85,7 @@ namespace mtgroup.locacao.Servicos
 
         async Task<Result> VerificarDisponibilidade(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
         {
-            if (!await ctx.ConsultaReservas.ExisteSala(requisicao))
+            if ((await ctx.ConsultaReservas.ListarSalasDisponiveis(requisicao.Periodo)).Any())
                 return Result.Fail($"Nenhuma sala disponível no período \"{requisicao.Periodo}\" atende aos itens requisitados");
 
             return Result.Ok();
@@ -125,6 +126,11 @@ namespace mtgroup.locacao.Servicos
             ////        (req) => ValidarPeriodoLocacao(ctx, req),
             ////        (req) => ValidarDiaUtil(ctx, req)
             ////    );
+        }
+
+        public bool EhPossivelSugerir(Result<RequisicaoSalaReuniao> result, RequisicaoSalaReuniao requisicao)
+        {
+            return false;
         }
     }
 }

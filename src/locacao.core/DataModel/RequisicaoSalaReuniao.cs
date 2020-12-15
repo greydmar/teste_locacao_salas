@@ -25,7 +25,7 @@ namespace mtgroup.locacao.DataModel
         public string DescricaoPerfil()
         {
             var sb = new StringBuilder("Perfil= {");
-            sb.AppendFormat("Periodo_Solicitado=[{0:D}, {1:G} horas]", this.Periodo.DataInicio, this.Periodo.Horas);
+            sb.AppendFormat("Periodo_Solicitado=[{0:D}, {1:G} horas]", this.Periodo.Inicio, this.Periodo.Horas);
             sb.AppendFormat("QuantidadePessoas={0:D}", this.QuantidadePessoas);
             sb.AppendFormat(",Recursos=[{0:F}]", Recursos);
             sb.Append('}');

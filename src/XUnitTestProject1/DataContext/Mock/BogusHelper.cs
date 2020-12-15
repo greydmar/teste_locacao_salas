@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Bogus;
 using mtgroup.locacao.DataModel;
 
-namespace locacao.tests.DadosMock
+namespace locacao.tests.DataContext
 {
     internal static class BogusHelper
     {
@@ -42,7 +42,7 @@ namespace locacao.tests.DadosMock
             return discoveredCombinations;
         }
         
-        static IEnumerable<RecursoSalaReuniao> CombinacoesDeRecursos()
+        public static IEnumerable<RecursoSalaReuniao> CombinacoesDeRecursos()
         {
             var seed = new[]
             {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentResults;
-using locacao.tests.DadosMock;
+using locacao.tests.DataContext;
 using locacao.tests.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using mtgroup.locacao.DataModel;
@@ -14,7 +14,6 @@ namespace XUnitTestProject1.Specs
     [Collection(nameof(TestContext))]
     public class TestValidacaoRequisicao
     {
-        
         private async Task<Result<RequisicaoSalaReuniao>> Validar(RequisicaoSalaReuniao requisicao)
         {
             using (var scoped = TestContext.Provider.CreateScope())
@@ -55,6 +54,5 @@ namespace XUnitTestProject1.Specs
             var resultado = await Validar(requisicao);
             Assert.True(resultado.IsFailed);
         }
-
     }
 }

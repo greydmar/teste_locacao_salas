@@ -14,6 +14,7 @@ namespace mtgroup.locacao.Interfaces.Servicos
     public interface IValidacaoRequisicao
     {
         Task<Result<RequisicaoSalaReuniao>> RequisicaoValida(RequisicaoSalaReuniao requisicao);
+        bool EhPossivelSugerir(Result<RequisicaoSalaReuniao> result, RequisicaoSalaReuniao requisicao);
     }
 
 }
