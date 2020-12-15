@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentResults;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces;
 using mtgroup.locacao.Interfaces.Repositorios;
@@ -9,16 +10,19 @@ using mtgroup.locacao.Interfaces.Servicos;
 
 namespace mtgroup.locacao.Servicos
 {
-    internal class ServicoAgendamento: IServicoAgendamento
+    public class ServicoAgendamento: IServicoAgendamento
     {
+        private readonly IContextoExecucao _ctxExecucao;
         private readonly IRepositorioReservas _ctxReservas;
         private readonly IValidacaoRequisicao _reqValidacao;
 
         public ServicoAgendamento(
+            IContextoExecucao ctxExecucao,
             IRepositorioReservas ctxReservas,
             IValidacaoRequisicao validacao
         )
         {
+            _ctxExecucao = ctxExecucao;
             _ctxReservas = ctxReservas;
             _reqValidacao = validacao;
         }
@@ -30,6 +34,7 @@ namespace mtgroup.locacao.Servicos
             var result = new ReservaSalaReuniao
             {
                 Periodo = requisicao.Periodo,
+                Solicitante = _ctxExecucao.Solicitante,
                 QuantidadePessoas = requisicao.QuantidadePessoas,
                 IdSalaReservada = sala.Identificador
             };
@@ -42,36 +47,49 @@ namespace mtgroup.locacao.Servicos
             if (requisicao == null)
                 throw new ArgumentNullException(nameof(requisicao));
 
-            var reqValida = await _reqValidacao.RequisicaoValida(requisicao);
+            var tmpReq = await _reqValidacao.RequisicaoValida(requisicao);
 
-            bool deveSugerir = false;
+            // Neste ponto, uma requisição inválida deve ser corrigida.
+            // Não incluiremos sugestões
+            if (tmpReq.IsFailed)
+                return ResultadoReservaSala.Falhou(tmpReq, "Tentativa de reserva falhou.");
+
+            var salasDisponiveis = await _ctxReservas.ListarSalasDisponiveis(requisicao.Periodo);
             
-            if (reqValida.IsFailed)
+            // Deste ponto em diante é possível fazer sugestões
+            if (!salasDisponiveis.Any())
             {
-                deveSugerir = (gerarSugestoes && _reqValidacao.EhPossivelSugerir(reqValida, requisicao));
-                
-                if (!deveSugerir)
-                    return ResultadoReservaSala.Falhou(reqValida, "Tentativa de reserva falhou.");
-                
-                return ResultadoReservaSala
-                    .FalhouComSugestoes(await ListarSugestoes(requisicao));
+                return await GerarSugestoesSeNecessario(tmpReq, requisicao, gerarSugestoes, "Tentativa de reserva falhou. Nenhuma sala disponível");
             }
+           
+            var reservaSala = NovaReserva(salasDisponiveis, requisicao);
 
-            var reqDisponibilidade = await _ctxReservas.ListarSalasDisponiveis(requisicao.Periodo);
-            
-            var reservaSala = NovaReserva(reqDisponibilidade, requisicao);
+            var resultado = await Result.Try(
+                async () => await _ctxReservas.GravarReserva(reservaSala)
+            );
 
-            reservaSala = await _ctxReservas
-                .GravarReserva(reservaSala);
+            if (resultado.IsFailed)
+                return await GerarSugestoesSeNecessario(resultado, requisicao, gerarSugestoes, "Falha na tentativa de gravar reserva.");
             
-            return ResultadoReservaSala.
-                OK(reservaSala);
+            return ResultadoReservaSala.OK(reservaSala);
+        }
+
+        private async Task<ResultadoReservaSala> GerarSugestoesSeNecessario(Result falha,
+            RequisicaoSalaReuniao requisicao, bool gerarSugestoes, string mensagemErro)
+        {
+            if (!gerarSugestoes)
+                return ResultadoReservaSala.Falhou(falha, mensagemErro);
+
+            return ResultadoReservaSala
+                .FalhouComSugestoes(falha, await ListarSugestoes(requisicao));
         }
 
         public async Task<IEnumerable<IPerfilSalaReuniao>> ListarSugestoes(RequisicaoSalaReuniao requisicao)
         {
-            return (await _ctxReservas.ListarSalasDisponiveis(requisicao.Periodo))
-                .Take(03);
+            var salasPeriodo = await _ctxReservas.ListarSalasDisponiveis(requisicao.Periodo);
+            var salas = AuxiliarReservas.EncontrarSalasCompativeis(salasPeriodo, requisicao);
+            
+            return salas.Take(03);
         }
     }
 }

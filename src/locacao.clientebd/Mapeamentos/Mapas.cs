@@ -71,15 +71,23 @@ namespace locacao.clientebd.Mapeamentos
         public void Configure(EntityTypeBuilder<Solicitante> builder)
         {
             builder.ToTable("sistema_usuario_conectado");
-            builder.HasKey(o => o.Name);
+            builder.HasKey(o => o.Id);
+
+            builder.HasIndex(o => o.Id)
+                .IsUnique()
+                .HasDatabaseName("sistema_usuario_identificador");
 
             builder.HasIndex(o => o.Name)
                 .IsUnique()
-                .HasDatabaseName("sistema_usuario_nome_usuario");
+                .HasDatabaseName("sistema_usuario_nome");
 
-            builder.Property(o => o.Name).IsRequired();
-            builder.Property(o => o.AuthenticationType);
-            builder.Property(o => o.IsAuthenticated);
+            builder.Property(o => o.Id)
+                .UseIdentityColumn()
+                .ValueGeneratedOnAdd();
+            
+            builder.Property(o => o.Name)
+                .IsRequired()
+                .HasMaxLength(50);
         }
     }
 

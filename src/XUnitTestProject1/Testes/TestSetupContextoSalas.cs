@@ -4,15 +4,17 @@ using locacao.clientebd;
 using locacao.tests.DataContext;
 using locacao.tests.DataContext.EfContext;
 using locacao.tests.Internal;
-using Microsoft.EntityFrameworkCore;
 using mtgroup.locacao.DataModel;
 using Xunit;
 
-namespace locacao.tests.Specs
+namespace locacao.tests.Testes
 {
-    public class TesteConfiguracaoMapeamentosContextoEf: TesteBase, IClassFixture<TestContextoLocacaoSalasSqlite>
+    /// <summary>
+    /// Auxiliar de verificação do processo de montagem e configuração do mapeapeamento e do funcionamento do Contexto EF Core
+    /// </summary>
+    public class TesteContextoLocacaoSalas: TesteBase, IClassFixture<TestContextoLocacaoSalasSqlite>
     {
-        public TesteConfiguracaoMapeamentosContextoEf(TestContextoLocacaoSalasSqlite fixture)
+        public TesteContextoLocacaoSalas(TestContextoLocacaoSalasSqlite fixture)
         {
             DbFixture = fixture;
         }
@@ -22,6 +24,22 @@ namespace locacao.tests.Specs
         private ContextoLocacaoSalas GerarContexto()
         {
             return DbFixture.CreateContext();
+        }
+
+        [Fact]
+        public void Usuarios_Foram_Registradas()
+        {
+            var listaReferencia = AuxiliarDados.UsuariosAmostra.ToList();
+
+            using (var ctx = GerarContexto())
+            {
+                var usuarios = ctx.ListaUsuarios.ToList();
+
+                Assert.Contains(usuarios, interno =>
+                    !string.IsNullOrEmpty(interno.Name) 
+                    && listaReferencia.Any(item => item.Name == interno.Name)
+                );
+            }
         }
 
         [Fact]

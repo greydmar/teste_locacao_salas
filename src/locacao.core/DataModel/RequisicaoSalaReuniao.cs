@@ -9,6 +9,11 @@ namespace mtgroup.locacao.DataModel
     /// </summary>
     public class RequisicaoSalaReuniao
     {
+        public RequisicaoSalaReuniao()
+        {
+            DataRegistro = DateTime.Now;
+        }
+
         public RequisicaoSalaReuniao(DateTime dataRegistro)
         {
             DataRegistro = dataRegistro;

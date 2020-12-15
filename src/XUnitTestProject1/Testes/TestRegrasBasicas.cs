@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FluentAssertions;
 using FluentResults;
 using locacao.tests.DataContext;
 using locacao.tests.Internal;
@@ -9,7 +8,7 @@ using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces.Servicos;
 using Xunit;
 
-namespace XUnitTestProject1.Specs
+namespace locacao.tests.Testes
 {
     [Collection(nameof(TestContext))]
     public class TestValidacaoRequisicao
@@ -18,7 +17,7 @@ namespace XUnitTestProject1.Specs
         {
             using (var scoped = TestContext.Provider.CreateScope())
             {
-                var servico = scoped.ServiceProvider.GetRequiredService<IValidacaoRequisicao>();
+                var servico = NsubstituteHelper.ServicoValidacao(scoped.ServiceProvider);
                 var resultado = await servico.RequisicaoValida(requisicao);
                 return resultado;
             }

@@ -75,5 +75,29 @@ namespace locacao.tests.DataContext
 
             return gerador.Generate(numeroElementos);
         }
+
+        public static RequisicaoSalaReuniao GeraUmaRequisicao(
+            DateTime dataReferencia, 
+            ushort maximoInicio = 0,
+            ushort maximoParticipantes = 20, 
+            ushort duracaoMaximaHoras = 8)
+        {
+            var recursos = CombinacoesDeRecursos().ToArray();
+
+            var gerador = new Faker<RequisicaoSalaReuniao>()
+                .RuleFor(o => o.QuantidadePessoas, faker => faker.Random.UShort(1, maximoParticipantes))
+                .RuleFor(o => o.Recursos, (faker) => faker.Random.ArrayElement(recursos))
+                .RuleFor(o => o.Periodo, faker =>
+                {
+                    var dataZero = dataReferencia.Date;
+                    var dataInicio = faker.Date.Between(dataZero, dataZero.AddDays(maximoInicio));
+                    var horasDuracao = faker.Random.UShort(1, duracaoMaximaHoras);
+
+                    return new PeriodoLocacao(dataInicio, TimeSpan.FromHours(horasDuracao));
+                });
+
+            return gerador.Generate(1).FirstOrDefault();
+        }
+
     }
 }

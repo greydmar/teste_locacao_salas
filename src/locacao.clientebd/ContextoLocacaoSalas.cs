@@ -33,7 +33,7 @@ namespace locacao.clientebd
         }
     }
 
-    internal abstract class DbContextRepo
+    public abstract class DbContextRepo
     {
         protected readonly ContextoLocacaoSalas DbCtx;
 

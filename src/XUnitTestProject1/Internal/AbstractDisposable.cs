@@ -1,7 +1,7 @@
 ﻿using System;
 using Nito.Disposables;
 
-namespace XUnitTestProject1.Specs
+namespace locacao.tests.Internal
 {
     public abstract class AbstractDisposable : SingleDisposable<AbstractDisposable.NoopContext>
     {

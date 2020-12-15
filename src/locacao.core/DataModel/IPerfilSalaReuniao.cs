@@ -1,6 +1,4 @@
-﻿using mtgroup.locacao.DataModel;
-
-namespace mtgroup.locacao.Interfaces
+﻿namespace mtgroup.locacao.DataModel
 {
     public interface IPerfilSalaReuniao
     {
@@ -12,4 +10,6 @@ namespace mtgroup.locacao.Interfaces
 
         public RecursoSalaReuniao Recursos { get; }
     }
+    
+    
 }

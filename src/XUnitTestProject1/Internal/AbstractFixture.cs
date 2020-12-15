@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using Nito.Disposables;
 using Xunit;
-using XUnitTestProject1.Specs;
 
 namespace locacao.tests.Internal
 {

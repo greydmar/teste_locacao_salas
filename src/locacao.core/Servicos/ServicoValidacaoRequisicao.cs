@@ -26,14 +26,16 @@ namespace mtgroup.locacao.Servicos
             ContextoValidacao ctx, 
             RequisicaoSalaReuniao requisicao)
         {
-
-            var solicitadoEm = requisicao.DataRegistro.Date;
             var dataHoje = ctx.ServicoData.DataHoje;
+            var solicitadoPara = requisicao.Periodo.Inicio;
 
-            if (solicitadoEm <= dataHoje)
+            if (solicitadoPara <= dataHoje)
+                return ResultHelper.Fail("data_minima", "Data de Reserva informada deve ter no mínimo um dia de antecedência");
+
+            if ((solicitadoPara - dataHoje) < TimeSpan.FromDays(1))
                 return ResultHelper.Fail("data_minima","Data de Reserva informada deve ter no mínimo um dia de antecedência");
 
-            if (solicitadoEm > (dataHoje + TimeSpan.FromDays(40)))
+            if (solicitadoPara > (dataHoje + TimeSpan.FromDays(40)))
                 return ResultHelper.Fail("data_maxima", "Data de Reserva deve ter no mínimo um dia de antecedência");
 
             return Result.Ok();
@@ -64,7 +66,7 @@ namespace mtgroup.locacao.Servicos
             RequisicaoSalaReuniao requisicao)
         {
             if (!await ctx.ConsultaReservas.ExistePerfilSala(requisicao))
-                ResultHelper.Fail("perfil_inexistente",
+                return ResultHelper.Fail("perfil_inexistente",
                     $"Não dispomos de salas com este perfil \"{requisicao.DescricaoPerfil()}\"");
 
             return Result.Ok();

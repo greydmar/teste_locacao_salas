@@ -10,6 +10,12 @@ namespace mtgroup.locacao.DataModel
             this.Termino = inicio + duracao;
         }
 
+        public PeriodoLocacao(DateTime inicio, ushort horasDuracao)
+        {
+            this.Inicio = inicio;
+            this.Termino = inicio + TimeSpan.FromHours(horasDuracao);
+        }
+
         internal PeriodoLocacao(DateTime inicio, DateTime termino)
         {
             this.Inicio = inicio;

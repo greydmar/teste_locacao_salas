@@ -6,8 +6,8 @@ namespace mtgroup.locacao.DataModel
     public enum RecursoSalaReuniao
     {
         Nenhum = 0,
-        AcessoInternet = 1,
-        Televisor = 2,
+        Televisor = 1,
+        AcessoInternet = 2,
         WebCam = 4,
         Computador = 8,
         VideoConferencia = AcessoInternet | Televisor | WebCam,

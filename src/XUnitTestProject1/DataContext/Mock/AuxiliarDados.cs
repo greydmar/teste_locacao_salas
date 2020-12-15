@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bogus;
 using locacao.clientebd.DTO;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces;
@@ -20,18 +21,18 @@ namespace locacao.tests.DataContext
             }
         );
 
-        private static readonly Lazy<IEnumerable<RequisicaoSalaReuniao>> _lzyRequisicoes =
-            new Lazy<IEnumerable<RequisicaoSalaReuniao>>(() =>
-                BogusHelper.Gerador(new DateTime(2020, 12, 10), 100)
+        private static readonly Lazy<ICollection<RequisicaoSalaReuniao>> _lzyRequisicoes =
+            new Lazy<ICollection<RequisicaoSalaReuniao>>(() =>
+                BogusHelper.Gerador(new DateTime(2020, 12, 10), 100).ToList()
             );
-        
+
         private static readonly Lazy<IEnumerable<Solicitante>> _lzyUsuarios =
             new Lazy<IEnumerable<Solicitante>>(() =>
                 new[]
                 {
-                    new Solicitante(){Name = "Usuario01"},
-                    new Solicitante(){Name = "Usuario02"},
-                    new Solicitante(){Name = "Usuario03"}
+                    new Solicitante("User01"),
+                    new Solicitante("User02"),
+                    new Solicitante("User03")
                 }
             );
 
@@ -62,7 +63,7 @@ namespace locacao.tests.DataContext
 
         internal static IEnumerable<Solicitante> UsuariosAmostra => _lzyUsuarios.Value;
 
-        internal static IEnumerable<RequisicaoSalaReuniao> Requisicoes => _lzyRequisicoes.Value;
+        internal static ICollection<RequisicaoSalaReuniao> Requisicoes => _lzyRequisicoes.Value;
 
         public static RequisicaoSalaReuniao Uma_Requisicao_Sala_Que_Atenda(
             int participantes, RecursoSalaReuniao recursos = RecursoSalaReuniao.Nenhum)
@@ -84,6 +85,20 @@ namespace locacao.tests.DataContext
                 QuantidadePessoas = Convert.ToUInt16(numParticipantes),
                 Recursos = recursos
             };
+        }
+
+        public static RequisicaoSalaReuniao Req_Uma_Sala_Hoje()
+        {
+            var item = new Randomizer().CollectionItem(Requisicoes);
+
+            var result = new RequisicaoSalaReuniao(DateTime.Now)
+            {
+                QuantidadePessoas = item.QuantidadePessoas,
+                Periodo = new PeriodoLocacao(DateTime.Now, TimeSpan.FromHours(item.Periodo.Horas)),
+                Recursos = item.Recursos
+            };
+
+            return result;
         }
 
         public static RequisicaoSalaReuniao Req_Uma_Sala_Hoje(TimeSpan duracao, int numParticipantes)
