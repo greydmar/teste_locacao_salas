@@ -1,16 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using mtgroup.auth;
 using mtgroup.locacao;
-using mtgroup.locacao.DTO;
 
 namespace mtgroup.db
 {
@@ -38,12 +32,13 @@ namespace mtgroup.db
    
     public static class ContextoEfCoreSqlite
     {
-        public const string ConexaoArquivoFisico = "FileName=TestContextoLocacaoSalas.db";
-        
+        public const string ConexaoBdArquivo = "FileName=TestContextoLocacaoSalas.db";
+        public const string ConexaoBdTesteIntegracao = "FileName=TestIntegracaoContextoSalas.db";
+
         public static void SetupOptions(DbContextOptionsBuilder dbCtxBuilder)
         {
             dbCtxBuilder.UseSqlite(
-                    ConexaoArquivoFisico,
+                    ConexaoBdArquivo,
                     builder =>
                     {
                         builder.MigrationsAssembly(typeof(ContextoEfCoreSqlite).Assembly.GetName().Name);
@@ -53,9 +48,28 @@ namespace mtgroup.db
                 .UseLoggerFactory(CreateFactory())*/
                 ;
         }
-        
+
+        public static void SetupTesteIntegracaoOptions(DbContextOptionsBuilder dbCtxBuilder)
+        {
+            dbCtxBuilder.UseSqlite(
+                    ConexaoBdTesteIntegracao,
+                    builder =>
+                    {
+                        builder.MigrationsAssembly(typeof(ContextoEfCoreSqlite).Assembly.GetName().Name);
+                    })
+
+                /*.EnableSensitiveDataLogging()
+                .UseLoggerFactory(CreateFactory())*/
+                ;
+        }
+
         private static readonly object _lock = new object();
 
+        public static IHost InicializarBdSqLiteTesteIntegracao(this IHost host)
+        {
+            return InicializarBdSqLite(host, true);
+        }
+        
         public static IHost InicializarBdSqLite(this IHost host, bool reset = false)
         {
             using (var scope = host.Services.CreateScope())
@@ -75,17 +89,6 @@ namespace mtgroup.db
 
                         ctxAuth.Database.Migrate();
                         ctxSalas.Database.Migrate();
-                        //if (reset)
-                        //{
-                        //    ctxAuth.Database.EnsureDeleted();
-                        //    ctxSalas.Database.EnsureDeleted();
-                        //}
-
-                        //var created2 = ctxSalas.Database.EnsureCreatedAsync().Result;
-                        //var created1 = ctxAuth.Database.EnsureCreatedAsync().Result;
-
-                        //RegistrarListaSalas(ctxSalas);
-                        //RegistrarUsuarios(ctxAuth);
                     }
                     finally
                     {
@@ -98,38 +101,6 @@ namespace mtgroup.db
             }
 
             return host;
-        }
-
-        private static void RegistrarUsuarios(ContextoAutorizacao ctx)
-        {
-            var usuarios = AuxiliarDados.UsuariosAmostra.ToList();
-            
-            if (ctx.ListaUsuarios.Count()== usuarios.Count)
-                return;
-
-            ctx.ListaUsuarios.AddRange(usuarios);
-
-            ctx.SaveChanges(true);
-        }
-
-        private static void RegistrarListaSalas(ContextoLocacaoSalas ctx)
-        {
-            var salas = AuxiliarDados.SalasDisponiveis.ToList();
-            
-            if (ctx.ListaSalas.Count() == salas.Count)
-                return;
-            
-            var lista = salas.Select(sala => new PerfilSalaReuniaoInterno()
-            {
-                Grupo = sala.Grupo,
-                Identificador = sala.Identificador,
-                QuantidadeAssentos = sala.QuantidadeAssentos,
-                Recursos = sala.Recursos
-            });
-
-            ctx.ListaSalas.AddRange(lista);
-
-            ctx.SaveChanges(true);
         }
     }
 }

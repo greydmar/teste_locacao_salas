@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using mtgroup.auth.Servicos;
 using mtgroup.locacao.Auxiliares;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -37,11 +39,33 @@ namespace mtgroup.locacao
                     jszOptions.IgnoreNullValues = true;
                 });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            });
+            services
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateLifetime = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
+                });
+
+            ////services.AddSingleton<IServicoPoliticasAutorizacao, ServicoPoliticasAutorizacao>();
+
+            ////services.AddAuthorization(options =>
+            ////{
+            ////    foreach (var politica in politicas)
+            ////    {
+            ////        options.AddPolicy();
+            ////    }
+            ////});
 
             services.AddHttpContextAccessor();
             

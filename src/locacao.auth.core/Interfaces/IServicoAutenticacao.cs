@@ -10,8 +10,8 @@ namespace mtgroup.auth.Interfaces
         Task<Usuario> Localizar(RequisicaoAutenticacaoUsuario criterio);
     }
     
-    public interface IServicoAutorizacao
+    public interface IServicoAutenticacao
     {
-        Task<Result<UsuarioAutorizado>> Autenticar(RequisicaoAutenticacaoUsuario model);
+        Task<Result<RespostaUsuarioAutorizado>> Autenticar(RequisicaoAutenticacaoUsuario model);
     }
 }

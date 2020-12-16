@@ -1,6 +1,6 @@
 ﻿namespace mtgroup.auth.Interfaces.Model
 {
-    public class UsuarioAutorizado
+    public class RespostaUsuarioAutorizado
     {
         public string NomeUsuario { get; set; }
         public int TempoVidaToken { get; set; }

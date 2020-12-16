@@ -69,7 +69,7 @@ namespace mtgroup.locacao
         private void ConfigureAuthorizationModule(IServiceCollection services)
         {
             services.AddScoped<IConsultaUsuarios, DbConsultaUsuarios>();
-            services.AddScoped<IServicoAutorizacao, ServicoAutorizacaoUsuario>();
+            services.AddScoped<IServicoAutenticacao, ServicoAutenticacaoUsuario>();
             services.AddScoped<IContextoExecucao, AuxiliarAcessoContextoExecucao>();
         }
 

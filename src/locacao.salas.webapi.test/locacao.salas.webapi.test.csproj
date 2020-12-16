@@ -4,11 +4,35 @@
     <TargetFramework>net5.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>mtgroup.locacao.webapi.test</AssemblyName>
+
+    <RootNamespace>mtgroup.locacao</RootNamespace>
+
+    <OutputType>Library</OutputType>
+
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+    <Compile Remove="Testes\TesteBasicoEndpoints.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="FluentAssertions.Web" Version="1.0.125" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="Xunit.DependencyInjection.Logging" Version="2.1.0" />
+    <PackageReference Include="Xunit.Extensions.Logging" Version="1.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -20,7 +44,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\locacao.salas.migrations\locacao.salas.migrations.csproj" />
     <ProjectReference Include="..\locacao.salas.webapi\locacao.webapi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

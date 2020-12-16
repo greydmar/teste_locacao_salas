@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using mtgroup.locacao.Auxiliares;
 using mtgroup.locacao.DataModel;
@@ -13,8 +14,10 @@ namespace mtgroup.locacao.Controllers
 
     [ApiController]
     [ApiVersion("1.0")]
+    [Authorize]
     [MtGroupAuthorize]
     [Route("api/v{version:apiVersion}/agendamento")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ServicoAgendamentoController : ControllerBase
     {
         private readonly IServicoAgendamento _svcAgendamento;

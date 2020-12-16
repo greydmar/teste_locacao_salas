@@ -15,7 +15,7 @@ namespace mtgroup.auth.Repositorios
         public async Task<Usuario> Localizar(RequisicaoAutenticacaoUsuario criterio)
         {
             return await DbCtx.ListaUsuarios
-                .SingleOrDefaultAsync(item => item.NomeLogin == criterio.Username);
+                .SingleOrDefaultAsync(item => item.NomeLogin == criterio.Login);
         }
     }
 }

@@ -12,25 +12,31 @@ namespace mtgroup.locacao.Controllers
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/auth")]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IServicoAutorizacao _svcAutorizacao;
+        private readonly IServicoAutenticacao _svcAutenticacao;
 
-        public AuthenticationController(IServicoAutorizacao svcAutorizacao)
+        public AuthenticationController(IServicoAutenticacao svcAutenticacao)
         {
-            _svcAutorizacao = svcAutorizacao;
+            _svcAutenticacao = svcAutenticacao;
         }
 
-        
+
+        /// <summary>
+        /// Executa autenticação de usuário
+        /// </summary>
+        /// <param name="requisicao"></param>
+        /// <returns>Usuário autenticado</returns>
         [HttpPost("authenticate")]
         [AllowAnonymous]
         [Produces("application/json")]
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status401Unauthorized)]
-        [ProducesResponseType(typeof(UsuarioAutorizado), Status200OK)]
+        [ProducesResponseType(typeof(RespostaUsuarioAutorizado), Status200OK)]
         public async Task<IActionResult> AuthByCredentials([FromBody] RequisicaoAutenticacaoUsuario requisicao)
         {
-            var resposta = await _svcAutorizacao.Autenticar(requisicao);
+            var resposta = await _svcAutenticacao.Autenticar(requisicao);
 
             if (resposta.IsSuccess)
             {
