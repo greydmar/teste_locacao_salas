@@ -3,19 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using mtgroup.locacao.Auxiliares;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces.Servicos;
 using mtgroup.locacao.Model;
+using mtgroup.locacao.Servicos;
 
 namespace mtgroup.locacao.Controllers
 {
     using static Microsoft.AspNetCore.Http.StatusCodes;
+    using static Constantes;
 
     [ApiController]
     [ApiVersion("1.0")]
-    [Authorize]
-    [MtGroupAuthorize]
+    [Authorize(NomesPoliticasAutorizacao.ApenasUsuariosAutenticados)]
     [Route("api/v{version:apiVersion}/agendamento")]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ServicoAgendamentoController : ControllerBase
@@ -58,7 +58,7 @@ namespace mtgroup.locacao.Controllers
             return StatusCode(Status500InternalServerError);
         }
 
-        private RespostaAgendamento Traduzir(ReservaSalaReuniao resposta)
+        private static RespostaAgendamento Traduzir(ReservaSalaReuniao resposta)
         {
             return new RespostaAgendamento()
             {

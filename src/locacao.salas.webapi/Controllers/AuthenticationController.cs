@@ -34,7 +34,7 @@ namespace mtgroup.locacao.Controllers
         [ProducesResponseType(Status404NotFound)]
         [ProducesResponseType(Status401Unauthorized)]
         [ProducesResponseType(typeof(RespostaUsuarioAutorizado), Status200OK)]
-        public async Task<IActionResult> AuthByCredentials([FromBody] RequisicaoAutenticacaoUsuario requisicao)
+        public async Task<IActionResult> Autenticar([FromBody] RequisicaoAutenticacaoUsuario requisicao)
         {
             var resposta = await _svcAutenticacao.Autenticar(requisicao);
 

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using mtgroup.auth.Servicos;
 using mtgroup.locacao.Auxiliares;
+using mtgroup.locacao.Servicos;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace mtgroup.locacao
@@ -57,15 +58,10 @@ namespace mtgroup.locacao
                     };
                 });
 
-            ////services.AddSingleton<IServicoPoliticasAutorizacao, ServicoPoliticasAutorizacao>();
-
-            ////services.AddAuthorization(options =>
-            ////{
-            ////    foreach (var politica in politicas)
-            ////    {
-            ////        options.AddPolicy();
-            ////    }
-            ////});
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicyUsuarioAutenticado();
+            });
 
             services.AddHttpContextAccessor();
             

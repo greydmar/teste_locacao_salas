@@ -22,7 +22,7 @@ namespace mtgroup.locacao.Servicos
             _repConsultaReservas = repConsultaReservas;
         }
 
-        Result ValidarAntecedencia(
+        static Result ValidarAntecedencia(
             ContextoValidacao ctx, 
             RequisicaoSalaReuniao requisicao)
         {
@@ -41,7 +41,7 @@ namespace mtgroup.locacao.Servicos
             return Result.Ok();
         }
 
-        Result ValidarPeriodoLocacao(
+        static Result ValidarPeriodoLocacao(
             ContextoValidacao ctx,
             RequisicaoSalaReuniao requisicao)
         {
@@ -72,7 +72,7 @@ namespace mtgroup.locacao.Servicos
             return Result.Ok();
         }
 
-        Result ValidarDiaUtil(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
+        static Result ValidarDiaUtil(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
         {
             DateTime inicioReserva = requisicao.Periodo;
 
@@ -85,7 +85,7 @@ namespace mtgroup.locacao.Servicos
             //return ValueTask.FromResult((true, string.Empty, string.Empty));
         }
 
-        async Task<Result> VerificarDisponibilidade(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
+        private async Task<Result> VerificarDisponibilidade(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
         {
             if ((await ctx.ConsultaReservas.ListarSalasDisponiveis(requisicao.Periodo)).Any())
                 return Result.Fail($"Nenhuma sala disponível no período \"{requisicao.Periodo}\" atende aos itens requisitados");
@@ -119,15 +119,6 @@ namespace mtgroup.locacao.Servicos
                 await ValidarPerfilSalaRequisitada(ctx, requisicao)
                 /*await VerificarDisponibilidade(ctx, requisicao)*/
             );
-
-            ////result.ToResult<RequisicaoSalaReuniao>();
-
-            ////return ResultadoOperacao<RequisicaoSalaReuniao>
-            ////    .EhAceitavelSeTodos("requisicao_valida", requisicao,
-            ////        (req) => ValidarAntecedencia(ctx, req),
-            ////        (req) => ValidarPeriodoLocacao(ctx, req),
-            ////        (req) => ValidarDiaUtil(ctx, req)
-            ////    );
         }
 
         public bool EhPossivelSugerir(Result<RequisicaoSalaReuniao> result, RequisicaoSalaReuniao requisicao)
