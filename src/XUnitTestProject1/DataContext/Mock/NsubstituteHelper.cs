@@ -8,7 +8,7 @@ using mtgroup.locacao.Interfaces.Servicos;
 using mtgroup.locacao.Servicos;
 using NSubstitute;
 
-namespace locacao.tests.DataContext
+namespace mtgroup.locacao.DataContext
 {
     internal static class NsubstituteHelper
     {

@@ -5,12 +5,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentResults;
-using locacao.auth.core.DataModel;
-using locacao.auth.core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using mtgroup.auth.DataModel;
+using mtgroup.auth.Interfaces;
+using mtgroup.auth.Interfaces.Model;
 
-namespace locacao.auth.core.Servicos
+namespace mtgroup.auth.Servicos
 {
     public class ServicoAutorizacaoUsuario : IServicoAutorizacao
     {

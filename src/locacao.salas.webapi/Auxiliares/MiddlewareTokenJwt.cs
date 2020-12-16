@@ -4,11 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using locacao.auth.core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
+using mtgroup.auth.Interfaces;
 
-namespace mtgroup.locacaosalas.Auxiliares
+namespace mtgroup.locacao.Auxiliares
 {
     public class MiddlewareTokenJwt
     {

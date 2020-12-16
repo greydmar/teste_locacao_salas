@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace locacao.tests.Internal
+namespace mtgroup.locacao.Internal
 {
     [Collection(nameof(TestContext))]
     public abstract class TesteBase: AbstractDisposable

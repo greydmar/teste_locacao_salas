@@ -1,9 +1,7 @@
-﻿using locacao.clientebd;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-
-namespace locacao.tests.DataContext.EfContext
+namespace mtgroup.locacao.DataContext.EfContext
 {
     using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 

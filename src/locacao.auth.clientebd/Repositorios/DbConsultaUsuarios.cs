@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using locacao.auth.core.DataModel;
-using locacao.auth.core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using mtgroup.auth.DataModel;
+using mtgroup.auth.Interfaces;
+using mtgroup.auth.Interfaces.Model;
 
 namespace mtgroup.auth.Repositorios
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mtgroup.locacaosalas.Model
+namespace mtgroup.locacao.Model
 {
     public class RequisicaoAgendamento
     {

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using locacao.clientebd;
-using locacao.clientebd.DTO;
-using locacao.tests.Internal;
 using Microsoft.EntityFrameworkCore;
+using mtgroup.locacao.DTO;
+using mtgroup.locacao.Internal;
 
-namespace locacao.tests.DataContext.EfContext
+namespace mtgroup.locacao.DataContext.EfContext
 {
     /// <summary>
     /// Fixture Contexto EfCore

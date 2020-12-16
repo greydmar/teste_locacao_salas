@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using locacao.auth.core.Interfaces;
+using mtgroup.auth.Interfaces;
 
-namespace locacao.auth.core.DataModel
+namespace mtgroup.auth.DataModel
 {
     public class Usuario : IEntidade
     {

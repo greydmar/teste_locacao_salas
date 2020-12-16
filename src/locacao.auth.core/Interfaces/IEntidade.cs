@@ -1,4 +1,4 @@
-﻿namespace locacao.auth.core.Interfaces
+﻿namespace mtgroup.auth.Interfaces
 {
     public interface IEntidade
     {

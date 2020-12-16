@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
-using locacao.clientebd.DTO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using mtgroup.locacao.DataModel;
+using mtgroup.locacao.DTO;
 
-namespace locacao.clientebd.Mapeamentos
+namespace mtgroup.locacao.Mapeamentos
 {
     internal class PerfilSalaReuniaoConfiguracao: IEntityTypeConfiguration<PerfilSalaReuniaoInterno>
     {
@@ -19,13 +19,15 @@ namespace locacao.clientebd.Mapeamentos
                 .IsUnique()
                 .HasDatabaseName("perfil_sala_identificador");
 
-            builder.Property(o=>o.Id)
-                .UseIdentityColumn()
+            builder.Property(o => o.Id)
+                .IsRequired()
                 .ValueGeneratedOnAdd();
 
             builder.Property(o => o.Identificador).IsRequired();
             builder.Property(o => o.QuantidadeAssentos).IsRequired();
             builder.Property(o => o.Grupo).IsRequired();
+
+            builder.HasData(AuxiliarInicializacao.SalasDisponiveis);
         }
     }
 
@@ -41,7 +43,6 @@ namespace locacao.clientebd.Mapeamentos
                 .HasDatabaseName("reserva_sala_codigo_reserva_unico");
 
             builder.Property(o => o.Id)
-                .UseIdentityColumn()
                 .ValueGeneratedOnAdd();
 
             builder.Property(o => o.CodigoReserva)
@@ -70,7 +71,8 @@ namespace locacao.clientebd.Mapeamentos
     {
         public void Configure(EntityTypeBuilder<Solicitante> builder)
         {
-            builder.ToTable("sistema_usuario_conectado");
+            // Este modelo é gerenciado por DbContext
+            builder.ToView("sistema_usuario_conectado");
             builder.HasKey(o => o.Id);
 
             builder.HasIndex(o => o.Id)
@@ -82,10 +84,9 @@ namespace locacao.clientebd.Mapeamentos
                 .HasDatabaseName("sistema_usuario_nome");
 
             builder.Property(o => o.Id)
-                .UseIdentityColumn()
-                .ValueGeneratedOnAdd();
+                .IsRequired();
             
-            builder.Property(o => o.Name)
+            builder.Property(o => o.Name).HasColumnName("nomeLogin")
                 .IsRequired()
                 .HasMaxLength(50);
         }

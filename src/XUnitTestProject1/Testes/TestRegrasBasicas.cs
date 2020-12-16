@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentResults;
-using locacao.tests.DataContext;
-using locacao.tests.Internal;
 using Microsoft.Extensions.DependencyInjection;
+using mtgroup.locacao.DataContext;
 using mtgroup.locacao.DataModel;
-using mtgroup.locacao.Interfaces.Servicos;
+using mtgroup.locacao.Internal;
 using Xunit;
 
-namespace locacao.tests.Testes
+namespace mtgroup.locacao.Testes
 {
     [Collection(nameof(TestContext))]
     public class TestValidacaoRequisicao

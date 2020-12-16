@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentResults;
-using locacao.auth.core.DataModel;
+using mtgroup.auth.DataModel;
+using mtgroup.auth.Interfaces.Model;
 
-namespace locacao.auth.core.Interfaces
+namespace mtgroup.auth.Interfaces
 {
     public interface IConsultaUsuarios
     {

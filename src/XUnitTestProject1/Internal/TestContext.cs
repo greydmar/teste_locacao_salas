@@ -6,7 +6,7 @@ using Ag3.Util;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace locacao.tests.Internal
+namespace mtgroup.locacao.Internal
 {
     /// <summary>
     /// Simple dependency injector Context

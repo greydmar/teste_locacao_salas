@@ -1,11 +1,11 @@
-﻿namespace Microsoft.Examples
-{
-    using Microsoft.AspNetCore.Mvc.ApiExplorer;
-    using Microsoft.OpenApi.Any;
-    using Microsoft.OpenApi.Models;
-    using Swashbuckle.AspNetCore.SwaggerGen;
-    using System.Linq;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
+namespace mtgroup.locacao.Auxiliares
+{
     /// <summary>
     /// Represents the Swagger/Swashbuckle operation filter used to document the implicit API version parameter.
     /// </summary>

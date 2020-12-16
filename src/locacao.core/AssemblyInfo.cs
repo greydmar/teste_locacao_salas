@@ -5,4 +5,5 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-[assembly:InternalsVisibleTo("locacao.core.unittest",AllInternalsVisible = true)]
+[assembly:InternalsVisibleTo("mtgroup.locacao.tests", AllInternalsVisible = true)]
+[assembly: InternalsVisibleTo("mtgroup.locacao.clientebd", AllInternalsVisible = true)]

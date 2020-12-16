@@ -5,9 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>locacao.core.tests</AssemblyName>
+    <AssemblyName>mtgroup.locacao.tests</AssemblyName>
 
-    <RootNamespace>locacao.tests</RootNamespace>
+    <RootNamespace>mtgroup.locacao</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

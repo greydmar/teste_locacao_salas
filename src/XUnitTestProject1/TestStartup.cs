@@ -1,16 +1,15 @@
 using System.Linq;
-using locacao.clientebd;
-using locacao.clientebd.Repositorios;
-using locacao.tests.DataContext;
-using locacao.tests.DataContext.EfContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using mtgroup.locacao.DataContext;
+using mtgroup.locacao.DataContext.EfContext;
 using mtgroup.locacao.Interfaces;
 using mtgroup.locacao.Interfaces.Repositorios;
 using mtgroup.locacao.Interfaces.Servicos;
+using mtgroup.locacao.Repositorios;
 using mtgroup.locacao.Servicos;
 
-namespace locacao.tests
+namespace mtgroup.locacao
 {
     public class TestStartup
     {

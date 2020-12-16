@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using locacao.clientebd.DTO;
 using Microsoft.EntityFrameworkCore;
 using mtgroup.locacao.DataModel;
-using mtgroup.locacao.Interfaces;
+using mtgroup.locacao.DTO;
 using mtgroup.locacao.Interfaces.Repositorios;
 
-namespace locacao.clientebd.Repositorios
+namespace mtgroup.locacao.Repositorios
 {
     public class DbConsultaReservas: DbContextRepo, IConsultaReservas
     {

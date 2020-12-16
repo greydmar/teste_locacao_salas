@@ -1,4 +1,4 @@
-﻿namespace locacao.auth.core.DataModel
+﻿namespace mtgroup.auth.Interfaces.Model
 {
     public class UsuarioAutorizado
     {

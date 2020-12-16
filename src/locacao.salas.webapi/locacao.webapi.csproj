@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>mtgroup.locacaosalas.api</AssemblyName>
-    <RootNamespace>mtgroup.locacaosalas</RootNamespace>
+    <RootNamespace>mtgroup.locacao</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +26,7 @@
     <ProjectReference Include="..\locacao.auth.core\locacao.auth.core.csproj" />
     <ProjectReference Include="..\locacao.clientebd\locacao.clientebd.csproj" />
     <ProjectReference Include="..\locacao.core\locacao.core.csproj" />
+    <ProjectReference Include="..\locacao.salas.migrations\locacao.salas.migrations.csproj" />
   </ItemGroup>
 
 

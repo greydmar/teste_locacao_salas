@@ -1,9 +1,9 @@
-﻿using locacao.auth.core.DataModel;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using mtgroup.auth.DataModel;
 
-namespace locacao.auth.core.Servicos
+namespace mtgroup.auth.Servicos
 {
-    internal sealed class PasswordHasher2: PasswordHasher<Usuario>
+    public sealed class PasswordHasher2: PasswordHasher<Usuario>
     {
         public static string HashPassword(Usuario user)
         {

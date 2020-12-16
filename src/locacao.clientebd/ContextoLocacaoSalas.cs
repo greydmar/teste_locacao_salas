@@ -1,10 +1,10 @@
-﻿using locacao.clientebd.DTO;
-using locacao.clientebd.Mapeamentos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using mtgroup.locacao.DataModel;
+using mtgroup.locacao.DTO;
 using mtgroup.locacao.Interfaces;
+using mtgroup.locacao.Mapeamentos;
 
-namespace locacao.clientebd
+namespace mtgroup.locacao
 {
     public partial class ContextoLocacaoSalas: DbContext
     {
@@ -16,9 +16,8 @@ namespace locacao.clientebd
         {
         }
 
-        public ContextoLocacaoSalas(DbContextOptions options) : base(options)
-        {
-        }
+        public ContextoLocacaoSalas(DbContextOptions<ContextoLocacaoSalas> options) 
+            : base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

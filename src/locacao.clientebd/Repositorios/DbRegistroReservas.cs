@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces.Repositorios;
 
-namespace locacao.clientebd.Repositorios
+namespace mtgroup.locacao.Repositorios
 {
     public class DbRegistroReservas : DbConsultaReservas, IRepositorioReservas
     {

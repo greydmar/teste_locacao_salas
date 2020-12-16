@@ -2,16 +2,15 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using locacao.tests.DataContext;
-using locacao.tests.DataContext.EfContext;
-using locacao.tests.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using mtgroup.locacao.DataContext.EfContext;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces.Servicos;
+using mtgroup.locacao.Internal;
 using Xunit;
 
-namespace locacao.tests.Testes
+namespace mtgroup.locacao.Testes
 {
     public class TestServicoAgendamento: TesteBase
     {

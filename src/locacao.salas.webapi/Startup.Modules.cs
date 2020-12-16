@@ -1,20 +1,21 @@
 using System.Linq;
-using locacao.auth.core.Interfaces;
-using locacao.auth.core.Servicos;
-using locacao.clientebd;
-using locacao.clientebd.Repositorios;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using mtgroup.auth;
+using mtgroup.auth.Interfaces;
 using mtgroup.auth.Repositorios;
+using mtgroup.auth.Servicos;
+using mtgroup.db;
+using mtgroup.locacao.Auxiliares;
 using mtgroup.locacao.Interfaces;
 using mtgroup.locacao.Interfaces.Repositorios;
 using mtgroup.locacao.Interfaces.Servicos;
+using mtgroup.locacao.Repositorios;
 using mtgroup.locacao.Servicos;
-using mtgroup.locacaosalas.Auxiliares;
 
-namespace mtgroup.locacaosalas
+namespace mtgroup.locacao
 {
     public partial class Startup
     {
@@ -30,11 +31,17 @@ namespace mtgroup.locacaosalas
 
         public static void SetupOptions(DbContextOptionsBuilder dbCtxBuilder)
         {
-            dbCtxBuilder
-                .UseSqlite("FileName=TestContextoLocacaoSalas.db")
-                .EnableSensitiveDataLogging()
-                .UseLoggerFactory(CreateFactory())
-                ;
+            ContextoEfCoreSqlite.SetupOptions(dbCtxBuilder);
+            ////dbCtxBuilder.UseSqlite(
+            ////        ContextoEfCoreSqlite.ConexaoArquivoFisico, 
+            ////        builder =>
+            ////        {
+            ////            builder.MigrationsAssembly(typeof(ContextoEfCoreSqlite).Assembly.GetName().Name);
+            ////        })
+                
+            ////    /*.EnableSensitiveDataLogging()
+            ////    .UseLoggerFactory(CreateFactory())*/
+            ////    ;
         }
 
         private void ConfigureModules(IServiceCollection services)

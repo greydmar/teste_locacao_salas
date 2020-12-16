@@ -1,6 +1,6 @@
 ﻿using FluentResults;
 
-namespace locacao.auth.core.Servicos
+namespace mtgroup.auth.Interfaces.Model
 {
     public class UsuarioNaoAutorizado : Error
     {

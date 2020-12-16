@@ -2,25 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using locacao.clientebd.DTO;
 using mtgroup.locacao.DataModel;
-using mtgroup.locacao.Interfaces;
 
-namespace locacao.tests.DataContext
+namespace mtgroup.locacao.DataContext
 {
     internal static class AuxiliarDados
     {
-        private static readonly Lazy<IEnumerable<IPerfilSalaReuniao>> _lzySalas = 
-            new Lazy<IEnumerable<IPerfilSalaReuniao>>(() =>
-            new[]
-            {
-                PerfisDisponiveis.PerfilSala01,
-                PerfisDisponiveis.PerfilSala02,
-                PerfisDisponiveis.PerfilSala03,
-                PerfisDisponiveis.PerfilSala04
-            }
-        );
-
         private static readonly Lazy<ICollection<RequisicaoSalaReuniao>> _lzyRequisicoes =
             new Lazy<ICollection<RequisicaoSalaReuniao>>(() =>
                 BogusHelper.Gerador(new DateTime(2020, 12, 10), 100).ToList()
@@ -36,30 +23,9 @@ namespace locacao.tests.DataContext
                 }
             );
 
-        public static IEnumerable<IPerfilSalaReuniao> SalasDisponiveis
-        {
-            get
-            {
-                var salas = new IPerfilSalaReuniao[] { }
-                    .Concat(Enumerable.Repeat(PerfisDisponiveis.PerfilSala01, 5))
-                    .Concat(Enumerable.Repeat(PerfisDisponiveis.PerfilSala02, 2))
-                    .Concat(Enumerable.Repeat(PerfisDisponiveis.PerfilSala03, 3))
-                    .Concat(Enumerable.Repeat(PerfisDisponiveis.PerfilSala04, 2))
-                    .Select((sala, idx)=>
-                    {
-                        var result = new PerfilSalaReuniaoInterno(sala)
-                        {
-                            Identificador = (idx+1).ToString("D2")
-                        };
-                        return result;
-                    });
+        internal static IEnumerable<IPerfilSalaReuniao> SalasDisponiveis => AuxiliarInicializacao.SalasDisponiveis;
 
-                return salas.ToList();
-
-            }
-        }
-
-        internal static IEnumerable<IPerfilSalaReuniao> PerfisSalasDisponiveis => _lzySalas.Value;
+        internal static IEnumerable<IPerfilSalaReuniao> PerfisSalasDisponiveis => AuxiliarInicializacao.PerfisSalasDisponiveis;
 
         internal static IEnumerable<Solicitante> UsuariosAmostra => _lzyUsuarios.Value;
 

@@ -1,12 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using locacao.auth.core.DataModel;
-using locacao.auth.core.Interfaces;
-using locacao.auth.core.Servicos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using mtgroup.auth.Interfaces;
+using mtgroup.auth.Interfaces.Model;
 
-namespace mtgroup.locacaosalas.Controllers
+namespace mtgroup.locacao.Controllers
 {
     using static Microsoft.AspNetCore.Http.StatusCodes;
     

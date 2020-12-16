@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using mtgroup.locacao.DataModel;
 using mtgroup.locacao.Interfaces;
 
-namespace mtgroup.locacaosalas.Auxiliares
+namespace mtgroup.locacao.Auxiliares
 {
     public class AuxiliarAcessoContextoExecucao : IContextoExecucao
     {

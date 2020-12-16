@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.ExceptionServices;
 
-namespace locacao.tests.Internal
+namespace mtgroup.locacao.Internal
 {
     public static class ExceptionUtils
     {

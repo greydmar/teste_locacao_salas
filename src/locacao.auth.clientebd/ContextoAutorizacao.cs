@@ -1,6 +1,6 @@
-﻿using locacao.auth.core.DataModel;
-using locacao.auth.core.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using mtgroup.auth.DataModel;
+using mtgroup.auth.Interfaces;
 using mtgroup.auth.Mapeamentos;
 
 namespace mtgroup.auth
@@ -13,9 +13,8 @@ namespace mtgroup.auth
         {
         }
 
-        public ContextoAutorizacao(DbContextOptions options) : base(options)
-        {
-        }
+        public ContextoAutorizacao(DbContextOptions<ContextoAutorizacao> options) 
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,9 +1,9 @@
 using System;
-using locacao.auth.core.Interfaces;
 using Microsoft.AspNetCore.Http;
+using mtgroup.auth.Interfaces;
 using mtgroup.locacao.DataModel;
 
-namespace mtgroup.locacaosalas.Auxiliares
+namespace mtgroup.locacao.Auxiliares
 {
     internal static class HttpContextExtensions
     {

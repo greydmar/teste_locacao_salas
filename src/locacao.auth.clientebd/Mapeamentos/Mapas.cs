@@ -1,6 +1,6 @@
-﻿using locacao.auth.core.DataModel;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using mtgroup.auth.DataModel;
 
 namespace mtgroup.auth.Mapeamentos
 {
@@ -19,13 +19,18 @@ namespace mtgroup.auth.Mapeamentos
                 .HasDatabaseName("sistema_usuario_nome");
 
             builder.Property(o=>o.Id)
-                .UseIdentityColumn()
+                .IsRequired()
                 .ValueGeneratedOnAdd();
 
-            builder.Property(o => o.NomeLogin).HasMaxLength(30).IsRequired();
-            builder.Property(o => o.Nome).HasMaxLength(30).IsRequired();
+            builder.Property(o => o.NomeLogin).HasColumnName("nomeLogin")
+                .IsRequired()
+                .HasMaxLength(50);
+            builder.Property(o => o.Nome)
+                .IsRequired().HasMaxLength(30);
             builder.Property(o => o.SobreNome).HasMaxLength(100);
             builder.Property(o => o.Password).HasMaxLength(100).IsRequired();
+
+            builder.HasData(AuxiliarInicializacao.UsuariosAmostra);
         }
     }
 }

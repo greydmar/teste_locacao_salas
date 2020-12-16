@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Bogus;
 using mtgroup.locacao.DataModel;
 
-namespace locacao.tests.DataContext
+namespace mtgroup.locacao.DataContext
 {
     internal static class BogusHelper
     {

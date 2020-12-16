@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
-using locacao.clientebd;
-using locacao.tests.DataContext;
-using locacao.tests.DataContext.EfContext;
-using locacao.tests.Internal;
+using mtgroup.locacao.DataContext;
+using mtgroup.locacao.DataContext.EfContext;
 using mtgroup.locacao.DataModel;
+using mtgroup.locacao.Internal;
 using Xunit;
 
-namespace locacao.tests.Testes
+namespace mtgroup.locacao.Testes
 {
     /// <summary>
     /// Auxiliar de verificação do processo de montagem e configuração do mapeapeamento e do funcionamento do Contexto EF Core

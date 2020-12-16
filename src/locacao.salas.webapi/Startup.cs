@@ -2,17 +2,15 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.Examples;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using mtgroup.locacaosalas.Auxiliares;
+using mtgroup.locacao.Auxiliares;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
-namespace mtgroup.locacaosalas
+namespace mtgroup.locacao
 {
     public partial class Startup
     {

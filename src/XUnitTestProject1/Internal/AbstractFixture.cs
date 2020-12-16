@@ -1,8 +1,6 @@
-﻿using System.ComponentModel;
-using Nito.Disposables;
-using Xunit;
+﻿using Xunit;
 
-namespace locacao.tests.Internal
+namespace mtgroup.locacao.Internal
 {
     public abstract class AbstractFixture<TStartupClass> : AbstractDisposable, IContextAwareFixture<TStartupClass>
         where TStartupClass: class, new()

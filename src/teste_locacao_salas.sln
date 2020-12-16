@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "locacao.clientebd", "locaca
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modulo.auth", "modulo.auth", "{E2519B60-6EE9-4C29-8D9D-20CBB8C56D47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locacao.salas.webapi", "locacao.salas.webapi\locacao.salas.webapi.csproj", "{4C83F555-19EE-426C-8516-3A982243CBF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locacao.webapi", "locacao.salas.webapi\locacao.webapi.csproj", "{4C83F555-19EE-426C-8516-3A982243CBF6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "modulo.base", "modulo.base", "{4C7FA9C9-CF98-4BC8-A2C6-A45F32D32CF8}"
 EndProject
@@ -24,6 +24,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "web.api", "web.api", "{17EFE2BF-C875-4FCB-B900-6FD87BE9D8C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locacao.auth.clientebd", "locacao.auth.clientebd\locacao.auth.clientebd.csproj", "{0E3090A2-423D-4EC1-ABF9-29E0DB7253E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locacao.salas.webapi.test", "locacao.salas.webapi.test\locacao.salas.webapi.test.csproj", "{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db.migrations", "db.migrations", "{B5FAB75C-0DAA-4CB3-BCDB-DEA708C5DC4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "locacao.salas.migrations", "locacao.salas.migrations\locacao.salas.migrations.csproj", "{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +65,14 @@ Global
 		{0E3090A2-423D-4EC1-ABF9-29E0DB7253E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E3090A2-423D-4EC1-ABF9-29E0DB7253E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E3090A2-423D-4EC1-ABF9-29E0DB7253E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +85,8 @@ Global
 		{4C83F555-19EE-426C-8516-3A982243CBF6} = {17EFE2BF-C875-4FCB-B900-6FD87BE9D8C6}
 		{23D91BDE-8F93-46DD-ABD4-54DA08D22B3E} = {E2519B60-6EE9-4C29-8D9D-20CBB8C56D47}
 		{0E3090A2-423D-4EC1-ABF9-29E0DB7253E7} = {E2519B60-6EE9-4C29-8D9D-20CBB8C56D47}
+		{85156295-9AE7-4FBF-A8D7-F2E1AE1497D7} = {17EFE2BF-C875-4FCB-B900-6FD87BE9D8C6}
+		{A4C16C5B-BAD0-4D85-9FF2-8E9853024E09} = {B5FAB75C-0DAA-4CB3-BCDB-DEA708C5DC4A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6FFA5895-EE0A-485F-A9CB-1293ABF727B6}
