@@ -10,7 +10,7 @@ namespace mtgroup.locacao
         {
             CreateHostBuilder(args)
                 .Build()
-                .InicializarBdSqLite(true)
+                .InicializarBdSqLite(false)
                 .Run();
         }
 
