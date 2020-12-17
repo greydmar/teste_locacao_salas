@@ -1,4 +1,9 @@
-﻿namespace mtgroup.auth.Interfaces
+﻿using System;
+using System.Collections.Immutable;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
+namespace mtgroup.auth.Interfaces
 {
     public class Configuracoes
     {
@@ -6,8 +11,21 @@
         {
             //TODO: Movimentar para configurações
             public const string AppSecret = "AgenciaZetta testando candidatos para d353nv01Dor .Net";
+            private static readonly byte[] AppSecretBytes = Encoding.ASCII.GetBytes(AppSecret);
 
             public const string ContextUserKeyName = "AuthorizedUser";
+            
+            public static SecurityKey NewSymmetricSecurityKey => new SymmetricSecurityKey(AppSecretBytes);
+
+            public static TokenValidationParameters ValidationParameters => new TokenValidationParameters()
+            {
+                ValidateLifetime = true,
+                ValidateIssuer = false, /* Ignorado para este teste*/
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = NewSymmetricSecurityKey,
+            };
         }
 
         public class ClaimNames

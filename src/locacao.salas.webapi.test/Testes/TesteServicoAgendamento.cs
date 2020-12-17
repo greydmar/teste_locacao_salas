@@ -45,6 +45,9 @@ namespace mtgroup.locacao.Testes
 
                 var request = client
                     .Request(routeSegment, endpointUrlSegment);
+                
+                if (autorizacao != null)
+                    request.WithOAuthBearerToken(autorizacao.Token);
 
                 return (await request.PostJsonAsync(requisicao))
                     .ResponseMessage;
@@ -96,6 +99,8 @@ namespace mtgroup.locacao.Testes
 
             var uncheckedResponse = await PostAgendamento(requisicao, null);
 
+            uncheckedResponse.Should()
+                .Be401Unauthorized();
         }
 
         [Fact]
@@ -114,7 +119,7 @@ namespace mtgroup.locacao.Testes
 
             var reqAutenticacao = new RequisicaoAutenticacaoUsuario()
             {
-                Login = "Usuario_Nao_Cadastrado",
+                Login = "Usuario01",
                 Senha = "Mudar@123"
             };
 

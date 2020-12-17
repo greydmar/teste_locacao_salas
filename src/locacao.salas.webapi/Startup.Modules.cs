@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -84,5 +85,27 @@ namespace mtgroup.locacao
             services.AddScoped<IConsultaReservas, DbConsultaReservas>();
         }
 
+        private void ConfigureDocumentation(IServiceCollection services)
+        {
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+            });
+
+            services.AddVersionedApiExplorer(p =>
+            {
+                p.GroupNameFormat = "'v'VVV";
+                p.SubstituteApiVersionInUrl = true;
+            });
+
+            //services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                // add a custom operation filter which sets default values
+                options.OperationFilter<SwaggerDefaultValues>();
+            });
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using FluentResults;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using mtgroup.auth.DataModel;
@@ -48,20 +49,21 @@ namespace mtgroup.auth.Servicos
         {
             // Gera um token válido por 50 minutos
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Configuracoes.Auth.AppSecret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Issuer = "http://localhost/",
-                Audience = "http://localhost/",
+                Issuer = "http://localhost:5000/",
+                Audience = "http://localhost:5000/",
                 IssuedAt = DateTime.UtcNow,
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(Configuracoes.ClaimNames.UserId, usuario.Id.ToString(CultureInfo.InvariantCulture), ClaimValueTypes.Integer32),
-                    new Claim(Configuracoes.ClaimNames.UserLogin, usuario.NomeLogin, ClaimValueTypes.String)
-                },"Autenticacao Jwt Bearer"),
-                
                 Expires = DateTime.UtcNow.AddMinutes(50),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(Configuracoes.Auth.NewSymmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature),
+                Subject = new ClaimsIdentity(new[]
+                    {
+                        new Claim(Configuracoes.ClaimNames.UserId, usuario.Id.ToString(CultureInfo.InvariantCulture),
+                            ClaimValueTypes.Integer32),
+                        new Claim(Configuracoes.ClaimNames.UserLogin, usuario.NomeLogin, ClaimValueTypes.String)
+                    },
+                    JwtBearerDefaults.AuthenticationScheme
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);

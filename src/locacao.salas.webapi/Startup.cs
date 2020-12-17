@@ -1,15 +1,14 @@
+using System;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
-using mtgroup.auth.Servicos;
-using mtgroup.locacao.Auxiliares;
+using mtgroup.auth.Interfaces;
 using mtgroup.locacao.Servicos;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -43,18 +42,33 @@ namespace mtgroup.locacao
             services
                 .AddAuthentication(options =>
                 {
+                    
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(options =>
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
+                    var jwtParameters = Configuracoes.Auth.ValidationParameters;
+                    options.Audience = jwtParameters.ValidAudience;
+                    options.AutomaticRefreshInterval = TimeSpan.FromMinutes(50); /* move to config*/
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
-                    options.TokenValidationParameters = new TokenValidationParameters()
+                    options.TokenValidationParameters = jwtParameters;
+                    options.Events = new JwtBearerEvents()
                     {
-                        ValidateLifetime = true,
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
+                        OnMessageReceived = context =>
+                        {
+                            return Task.CompletedTask;
+                        },
+                        OnAuthenticationFailed = context =>
+                        {
+                            return Task.CompletedTask;
+                        },
+
+                        OnTokenValidated = context =>
+                        {
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
@@ -69,29 +83,6 @@ namespace mtgroup.locacao
             ConfigureModules(services);
 
             ConfigureDocumentation(services);
-        }
-
-        private void ConfigureDocumentation(IServiceCollection services)
-        {
-            services.AddApiVersioning(options =>
-            {
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
-            });
-
-            services.AddVersionedApiExplorer(p =>
-            {
-                p.GroupNameFormat = "'v'VVV";
-                p.SubstituteApiVersionInUrl = true;
-            });
-            
-            //services.AddSwaggerGen();
-            services.AddSwaggerGen(options =>
-            {
-                // add a custom operation filter which sets default values
-                options.OperationFilter<SwaggerDefaultValues>();
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -112,9 +103,9 @@ namespace mtgroup.locacao
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
-            app.UseMiddleware<MiddlewareTokenJwt>();
-
-            //app.UseAuthentication();
+            //app.UseMiddleware<MiddlewareTokenJwt>();
+            
+            app.UseAuthentication();
             app.UseAuthorization();
             
             app.UseEndpoints(endpoints =>

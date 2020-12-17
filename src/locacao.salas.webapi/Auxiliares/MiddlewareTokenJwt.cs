@@ -36,16 +36,7 @@ namespace mtgroup.locacao.Auxiliares
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(Configuracoes.Auth.AppSecret);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
+                tokenHandler.ValidateToken(token, Configuracoes.Auth.ValidationParameters, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken) validatedToken;
                 

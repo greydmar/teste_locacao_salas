@@ -72,7 +72,6 @@ namespace mtgroup.db
                     {
                         builder.MigrationsAssembly(typeof(ContextoEfCoreSqlite).Assembly.GetName().Name);
                     })
-
                 /*.EnableSensitiveDataLogging()
                 .UseLoggerFactory(CreateFactory())*/
                 ;
