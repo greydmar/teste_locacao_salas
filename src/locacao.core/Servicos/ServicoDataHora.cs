@@ -13,7 +13,7 @@ namespace mtgroup.locacao.Servicos
 
         public bool EhDiaUtil(DateTime data)
         {
-            if (new[] {DayOfWeek.Monday, DayOfWeek.Saturday}.Contains(data.DayOfWeek))
+            if (DateSystem.IsWeekend(data, CountryCode.BR))
                 return false;
 
             //TODO: Cache it!

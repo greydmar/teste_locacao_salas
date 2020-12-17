@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -7,8 +8,10 @@ using Flurl.Http;
 using Microsoft.AspNetCore.Mvc;
 using mtgroup.auth.Interfaces.Model;
 using mtgroup.locacao.Controllers;
+using mtgroup.locacao.Interfaces;
 using mtgroup.locacao.Internal;
 using mtgroup.locacao.Model;
+using Nager.Date;
 using Xunit;
 
 namespace mtgroup.locacao.Testes
@@ -29,7 +32,6 @@ namespace mtgroup.locacao.Testes
         {
             return "api/v{version:apiVersion}/agendamento"
                 .Replace("{version:apiVersion}", _targetVersion.ToString("V"));
-
         }
 
         protected async Task<HttpResponseMessage> PostAgendamento(
@@ -54,22 +56,24 @@ namespace mtgroup.locacao.Testes
             });
         }
 
-        internal async Task<TResult> PostAgendamentoComValidacao<TResult>(
-            RequisicaoAgendamento requisicao, 
+        private async Task<RespostaUsuarioAutorizado> AssertAutenticacao(
             RequisicaoAutenticacaoUsuario reqUsuario
-            
-        )
+            )
         {
-            RespostaUsuarioAutorizado autorizacao = null;
-            
             using (new AssertionScope())
             {
                 var caller = new TesteControllerAutenticacao(this.AppFactory);
 
-                autorizacao = await caller
+                return await caller
                     .PostAndValidateAuthByCredentials<RespostaUsuarioAutorizado>(reqUsuario);
             }
+        }
 
+        internal async Task<TResult> PostAgendamentoComValidacao<TResult>(
+            RequisicaoAgendamento requisicao,
+            RespostaUsuarioAutorizado autorizacao
+        )
+        {
             var uncheckedResponse = await PostAgendamento(requisicao, autorizacao);
 
             uncheckedResponse.Should()
@@ -104,7 +108,7 @@ namespace mtgroup.locacao.Testes
         }
 
         [Fact]
-        public async Task Chamada_Com_Autenticacao_Aceita()
+        public async Task Chamada_Com_Autenticacao_Eh_Aceita()
         {
             var reqAutenticacao = new RequisicaoAutenticacaoUsuario()
             {
@@ -123,9 +127,43 @@ namespace mtgroup.locacao.Testes
                 TvWebCam = false
             };
 
-            var uncheckedResponse = await PostAgendamentoComValidacao<RespostaAgendamento>(requisicao, reqAutenticacao);
+            var autorizacao = await AssertAutenticacao(reqAutenticacao);
+            
+            var uncheckedResponse = await PostAgendamento(requisicao, autorizacao);
 
+            uncheckedResponse.Should()
+                .NotHaveHttpStatusCode(HttpStatusCode.Unauthorized, "Autenticação é válida");
         }
 
+        [Fact]
+        public async Task Agendamento_Requisicao_Valida_Eh_Aceito()
+        {
+            var reqAutenticacao = new RequisicaoAutenticacaoUsuario()
+            {
+                Login = "Usuario01",
+                Senha = "Mudar@123"
+            };
+
+            var dataReferencia = DateTime.Now.Date.AddDays(2);
+            var proximoDiaUtil = DateSystemUtils.NearestWorkDateBetween(dataReferencia, dataReferencia.AddDays(38));
+            
+            var requisicao = new RequisicaoAgendamento()
+            {
+                QuantidadePessoas = 5,
+                DataInicio = proximoDiaUtil,
+                DataFim = proximoDiaUtil,
+                HoraFim = new TimeSpan(10, 50, 0),
+                HoraInicio = new TimeSpan(13, 50, 0),
+                AcessoInternet = false,
+                TvWebCam = false
+            };
+
+            var autorizacao = await AssertAutenticacao(reqAutenticacao);
+
+            var uncheckedResponse = await PostAgendamento(requisicao, autorizacao);
+
+            uncheckedResponse.Should()
+                .NotHaveHttpStatusCode(HttpStatusCode.Unauthorized, "Autenticação é válida");
+        }
     }
 }
