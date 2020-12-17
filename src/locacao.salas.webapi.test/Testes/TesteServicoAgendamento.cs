@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -145,25 +146,23 @@ namespace mtgroup.locacao.Testes
             };
 
             var dataReferencia = DateTime.Now.Date.AddDays(2);
-            var proximoDiaUtil = DateSystemUtils.NearestWorkDateBetween(dataReferencia, dataReferencia.AddDays(38));
-            
-            var requisicao = new RequisicaoAgendamento()
-            {
-                QuantidadePessoas = 5,
-                DataInicio = proximoDiaUtil,
-                DataFim = proximoDiaUtil,
-                HoraFim = new TimeSpan(10, 50, 0),
-                HoraInicio = new TimeSpan(13, 50, 0),
-                AcessoInternet = false,
-                TvWebCam = false
-            };
+
+            var listaAmostras = new ListaMinimaRequisicoesExigidas(dataReferencia);
 
             var autorizacao = await AssertAutenticacao(reqAutenticacao);
 
-            var uncheckedResponse = await PostAgendamento(requisicao, autorizacao);
+            using (new AssertionScope("teste requisitos mínimos"))
+            {
+                foreach (var objAmostra in listaAmostras)
+                {
+                    var amostra = objAmostra.First();
+                    
+                    var uncheckedResponse = await PostAgendamento((RequisicaoAgendamento)amostra, autorizacao);
 
-            uncheckedResponse.Should()
-                .NotHaveHttpStatusCode(HttpStatusCode.Unauthorized, "Autenticação é válida");
+                    uncheckedResponse.Should()
+                        .Be200Ok();
+                }
+            }
         }
     }
 }
