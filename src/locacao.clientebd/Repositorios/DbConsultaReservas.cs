@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,17 @@ namespace mtgroup.locacao.Repositorios
 
         public async Task<bool> ExistePerfilSala(RequisicaoSalaReuniao requisicao)
         {
-            return await GetDbSet<PerfilSalaReuniaoInterno>().AnyAsync(
-                perfil => perfil.QuantidadeAssentos >= requisicao.QuantidadePessoas 
-                          && (requisicao.Recursos == RecursoSalaReuniao.Nenhum || (perfil.Recursos & requisicao.Recursos) != 0)
-            );
+            try
+            {
+                return await GetDbSet<PerfilSalaReuniaoInterno>().AnyAsync(
+                    perfil => perfil.QuantidadeAssentos >= requisicao.QuantidadePessoas
+                              && (requisicao.Recursos == RecursoSalaReuniao.Nenhum || (perfil.Recursos & requisicao.Recursos) != 0)
+                );
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public async Task<IEnumerable<IPerfilSalaReuniao>> ListarSalasDisponiveis(PeriodoLocacao periodo)

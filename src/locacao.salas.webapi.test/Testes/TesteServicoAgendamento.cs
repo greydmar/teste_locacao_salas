@@ -92,8 +92,8 @@ namespace mtgroup.locacao.Testes
                 AcessoInternet = false,
                 DataInicio = DateTime.Now.Date.AddDays(2),
                 DataFim = DateTime.Now.Date.AddDays(2),
-                HoraFim = new TimeSpan(0, 10, 50),
-                HoraInicio = new TimeSpan(0, 13, 50),
+                HoraFim = new TimeSpan(10, 50, 0),
+                HoraInicio = new TimeSpan(13, 50, 0),
                 TvWebCam = false
             };
 
@@ -118,8 +118,8 @@ namespace mtgroup.locacao.Testes
                 AcessoInternet = false,
                 DataInicio = DateTime.Now.Date.AddDays(2),
                 DataFim = DateTime.Now.Date.AddDays(2),
-                HoraFim = new TimeSpan(0, 10, 50),
-                HoraInicio = new TimeSpan(0, 13, 50),
+                HoraFim = new TimeSpan(10, 50, 0),
+                HoraInicio = new TimeSpan(13, 50, 0),
                 TvWebCam = false
             };
 

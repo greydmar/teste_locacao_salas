@@ -35,7 +35,7 @@ namespace mtgroup.db
     public static class ContextoEfCoreSqlite
     {
         public const string ConexaoBdArquivo = "FileName=TestContextoLocacaoSalas.db";
-        public const string ConexaoBdTesteIntegracao = "Datasource=file::memory:?cache=shared";
+        public const string ConexaoBdTesteIntegracao = "Datasource=:memory:?cache=shared";
         
         private static readonly string InMemorySqlDatabaseName = $"{Guid.NewGuid():N}.db";
         
@@ -56,7 +56,7 @@ namespace mtgroup.db
         public static void SetupTesteIntegracaoOptions(DbContextOptionsBuilder dbCtxBuilder)
         {
             //FIX SUGERIDO: https://stackoverflow.com/a/47751630
-            var builder = new SqliteConnectionStringBuilder
+            var builder = new SqliteConnectionStringBuilder(ConexaoBdTesteIntegracao)
             {
                 DataSource = InMemorySqlDatabaseName,
                 Mode = SqliteOpenMode.Memory,
@@ -78,40 +78,51 @@ namespace mtgroup.db
         }
 
         private static readonly object _lock = new object();
+        
+        [ThreadStatic]
+        private static bool _initialized;
+
+        private static DbContext SlowInitialize(this DbContext self, bool reset = false)
+        {
+            if (reset)
+                self.Database.EnsureDeleted();
+
+            self.Database.Migrate();
+            return self;
+        }
 
         public static IHost InicializarBdSqLiteTesteIntegracao(this IHost host)
         {
             return InicializarBdSqLite(host, true);
         }
-        
+
         public static IHost InicializarBdSqLite(this IHost host, bool reset = false)
         {
-            using (var scope = host.Services.CreateScope())
+            lock (_lock)
             {
-                lock (_lock)
+                if (_initialized)
+                    return host;
+                
+                using (var scope = host.Services.CreateScope())
                 {
-                    var ctxAuth = scope.ServiceProvider.GetRequiredService<ContextoAutorizacao>();
-                    var ctxSalas = scope.ServiceProvider.GetRequiredService<ContextoLocacaoSalas>();
-
-                    try
+                    using (var dbCtx = scope.ServiceProvider.GetRequiredService<ContextoAutorizacao>())
                     {
-                        if (reset)
-                        {
-                            ctxAuth.Database.EnsureDeleted();
-                            ctxSalas.Database.EnsureDeleted();
-                        }
-
-                        ctxAuth.Database.Migrate();
-                        ctxSalas.Database.Migrate();
+                        dbCtx.SlowInitialize(reset);
                     }
-                    finally
-                    {
-                        ctxAuth?.Dispose();
-                        ctxSalas.Dispose();
-
-                        Task.Delay(500);
-                    }
+                    Task.Delay(150);
                 }
+
+                // and again
+                using (var scope = host.Services.CreateScope())
+                {
+                    using (var dbCtx = scope.ServiceProvider.GetRequiredService<ContextoLocacaoSalas>())
+                    {
+                        dbCtx.SlowInitialize(reset);
+                    }
+                    Task.Delay(150);
+                }
+
+                _initialized = true;
             }
 
             return host;

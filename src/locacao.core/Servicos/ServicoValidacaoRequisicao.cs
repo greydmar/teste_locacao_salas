@@ -74,7 +74,7 @@ namespace mtgroup.locacao.Servicos
 
         static Result ValidarDiaUtil(ContextoValidacao ctx, RequisicaoSalaReuniao requisicao)
         {
-            DateTime inicioReserva = requisicao.Periodo;
+            DateTime inicioReserva = requisicao.Periodo.Inicio;
 
             if (!ctx.ServicoData.EhDiaUtil(inicioReserva))
                 return Result.Fail($"A data solicitada \"{inicioReserva:d}\" não é um dia útil");

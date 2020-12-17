@@ -34,13 +34,13 @@ namespace mtgroup.locacao.Controllers
         [ProducesResponseType(typeof(RespostaAgendamento), Status200OK)]
         public async Task<IActionResult> AgendarSala(RequisicaoAgendamento requisicao)
         {
-            var reqTraduzida = Traduzir(requisicao);
+            var reqTraduzida = Mapeamento.Mapear(requisicao);
             
             var resposta = await _svcAgendamento.EfetuarReserva(reqTraduzida);
 
             if (resposta.IsSuccess)
             {
-                var agendamento = Traduzir(resposta.Value);
+                var agendamento = Mapeamento.Mapear(resposta.Value);
                 return Ok(agendamento);
             }
 
@@ -56,39 +56,6 @@ namespace mtgroup.locacao.Controllers
                 return BadRequest(outros.FirstOrDefault());
 
             return StatusCode(Status500InternalServerError);
-        }
-
-        private static RespostaAgendamento Traduzir(ReservaSalaReuniao resposta)
-        {
-            return new RespostaAgendamento()
-            {
-                IdSalaReservada = "SALA " + resposta.IdSalaReservada
-            };
-        }
-        
-        private RequisicaoSalaReuniao Traduzir(RequisicaoAgendamento requisicao)
-        {
-            var dtInicio = requisicao.DataInicio.Date.Add(requisicao.HoraInicio);
-            var dtFim = requisicao.DataFim.Date.Add(requisicao.HoraFim);
-
-            var tmpData = dtInicio > dtFim ? dtFim : dtInicio;
-            dtFim = dtFim > tmpData ? tmpData : dtFim;
-            dtInicio = tmpData;
-
-            var recursos = RecursoSalaReuniao.Nenhum;
-            if (requisicao.AcessoInternet)
-                recursos |= RecursoSalaReuniao.AcessoInternet;
-            if (requisicao.TvWebCam)
-                recursos |= RecursoSalaReuniao.VideoConferencia;
-
-            var result = new RequisicaoSalaReuniao(DateTime.Now)
-            {
-                QuantidadePessoas = Convert.ToUInt16(requisicao.QuantidadePessoas),
-                Periodo = new PeriodoLocacao(dtInicio, dtFim - dtInicio),
-                Recursos = recursos
-            };
-
-            return result;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace mtgroup.locacao.DataModel
 {
+    [DebuggerDisplay("Inicio:{Inicio,nq}, Termino:{Termino,nq}")]
     public class PeriodoLocacao : IEquatable<PeriodoLocacao>
     {
         public PeriodoLocacao(DateTime inicio, TimeSpan duracao)
@@ -27,11 +29,6 @@ namespace mtgroup.locacao.DataModel
         public DateTime Termino { get; }
 
         public long Horas => Convert.ToInt64((Termino - Inicio).TotalHours);
-
-        public static implicit operator DateTime(PeriodoLocacao periodo)
-        {
-            return periodo.Inicio.Date;
-        }
 
         public bool Equals(PeriodoLocacao other)
         {
