@@ -13,32 +13,32 @@ namespace mtgroup.locacao
 {
     public class TestStartup
     {
-        public void ConfigureService(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IServicoDataHora, ServicoDataHora>();
             
             services.AddScoped<IValidacaoRequisicao, ServicoValidacaoRequisicao>();
             services.AddScoped<IServicoAgendamento, ServicoAgendamento>();
 
-            services.AddScoped<IRepositorioReservas,DbRegistroReservas>();
-            services.AddScoped<IConsultaReservas, DbConsultaReservas>();
+            services.AddScoped<IRepositorioReservas>(NsubstituteHelper.RepositorioReservas);
+            services.AddScoped<IConsultaReservas>(NsubstituteHelper.ConsultaReservas);
             services.AddScoped<IContextoExecucao>(NsubstituteHelper.ContextoExecucao);
 
-            var descriptor = services.SingleOrDefault
-                (d => d.ServiceType == typeof(DbContextOptions<ContextoLocacaoSalas>));
+            ////var descriptor = services.SingleOrDefault
+            ////    (d => d.ServiceType == typeof(DbContextOptions<ContextoLocacaoSalas>));
 
-            if (descriptor != null)
-                services.Remove(descriptor);
+            ////if (descriptor != null)
+            ////    services.Remove(descriptor);
             
-            services.AddDbContext<ContextoLocacaoSalas>(TestContextoLocacaoSalasSqlite.SetupOptions);
-            services.AddSingleton<TestContextoLocacaoSalas, TestContextoLocacaoSalasSqlite>();
+            ////services.AddDbContext<ContextoLocacaoSalas>(TestContextoLocacaoSalasSqlite.SetupOptions);
+            ////services.AddSingleton<TestContextoLocacaoSalas, TestContextoLocacaoSalasSqlite>();
 
             /* Chamada da fixture para garantir a inicialização do db-context*/
-            var provider = services.BuildServiceProvider();
+            //var provider = services.BuildServiceProvider();
 
-            var fixture = provider.GetRequiredService<TestContextoLocacaoSalas>();
+            //var fixture = provider.GetRequiredService<TestContextoLocacaoSalas>();
 
-            fixture.ChecarInicializacao();
+            //fixture.ChecarInicializacao();
             //TestContextoLocacaoSalas
         }
     }

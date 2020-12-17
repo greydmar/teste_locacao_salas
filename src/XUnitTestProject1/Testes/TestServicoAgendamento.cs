@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using mtgroup.locacao.DataContext;
 using mtgroup.locacao.DataContext.EfContext;
 using mtgroup.locacao.DataModel;
+using mtgroup.locacao.Interfaces;
+using mtgroup.locacao.Interfaces.Repositorios;
 using mtgroup.locacao.Interfaces.Servicos;
 using mtgroup.locacao.Internal;
 using Xunit;
@@ -14,44 +19,23 @@ namespace mtgroup.locacao.Testes
 {
     public class TestServicoAgendamento: TesteBase
     {
-        internal TestContextoLocacaoSalas DbFixture { get; }
-        
         public TestServicoAgendamento()
         {
-            DbFixture = TestContext.Provider.GetRequiredService<TestContextoLocacaoSalas>();
         }
-
-
-        private async Task RemoverTodosAgendamentos()
-        {
-            await DbFixture.Execute(async ctx =>
-            {
-                var dbSet = ctx.Set<ReservaSalaReuniao>();
-
-                using (var allItems = dbSet.AsQueryable().GetEnumerator())
-                {
-                    while (allItems.MoveNext() && allItems.Current != null)
-                        dbSet.Remove(allItems.Current);
-                }
-
-                await ctx.SaveChangesAsync(true);
-            });
-        }
-
 
         [Fact]
         public async Task Nenhum_Agendamento_Registrado()
         {
-            await RemoverTodosAgendamentos();
-            
-            await DbFixture.Execute(async ctx =>
+            var periodo = new PeriodoLocacao(DateTime.Now.AddDays(60), DateTime.Now.AddDays(61));
+
+            await UsingScoped(async provider =>
             {
-                var dbSet = ctx.Set<ReservaSalaReuniao>();
-                // Find any item
-                var anyItem = await dbSet.AnyAsync();
+                var salasDisponiveis = await provider.GetRequiredService<IRepositorioReservas>() 
+                    .ListarSalasDisponiveis(periodo);
 
-
-                anyItem.Should().BeFalse("Não deve existir nenhum item armazenado");
+                salasDisponiveis.Count().Should()
+                    .Be(AuxiliarDados.SalasDisponiveis.Count(),
+                        "Nenhuma sala deve estar reservada acima de 40 dias ");
             });
         }
 
@@ -64,11 +48,15 @@ namespace mtgroup.locacao.Testes
                 await Nenhum_Agendamento_Registrado();
             }
 
+            // uma data/hora independente do momento em q o teste está sendo executado 
+            var dataReferencia = DateTime.Now.Date
+                .AddDays(2); /* critério de no mínimo 01 dia de antecedência */
+            
+            var proximoDiaUtil = DateSystemUtils.NearestWorkDateBetween(dataReferencia, dataReferencia.AddDays(38));
+
             var dataRef = DateTime.Now;
             
-            // uma data/hora independente do momento em q o teste está sendo executado 
-            var dataMarcacao = DateTime.Now.Date
-                .AddDays(2) /* critério de no mínimo 01 dia de antecedência */
+            var dataMarcacao = proximoDiaUtil
                 .AddHours(08);
 
             var requisicao = new RequisicaoSalaReuniao(dataRef)
@@ -78,6 +66,21 @@ namespace mtgroup.locacao.Testes
                 Recursos = RecursoSalaReuniao.Nenhum
             };
 
+            var reserva = await UsingScoped(async provider =>
+            {
+                var svcAgendamento = provider.GetRequiredService<IServicoAgendamento>();
+
+                return await svcAgendamento.EfetuarReserva(requisicao, false);
+            });
+
+            reserva.Should()
+                .Match<ResultadoReservaSala>(sala => sala.IsSuccess, "Requisição atende aos parâmetros e todas as salas estão disponíveis");
+        }
+
+        [Theory(DisplayName="Testes mínimos exigidos")]
+        [ClassData(typeof(ListaMinimaRequisicoesExigidas))]
+        public async Task Verificao_Testes_Minimos(RequisicaoSalaReuniao requisicao)
+        {
             var reserva = await UsingScoped(async provider =>
             {
                 var svcAgendamento = provider.GetRequiredService<IServicoAgendamento>();

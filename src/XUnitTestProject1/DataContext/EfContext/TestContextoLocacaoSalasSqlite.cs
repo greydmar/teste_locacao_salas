@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace mtgroup.locacao.DataContext.EfContext
@@ -31,8 +33,15 @@ namespace mtgroup.locacao.DataContext.EfContext
 
         public static void SetupOptions(DbContextOptionsBuilder dbCtxBuilder)
         {
+            var builder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = $"{Guid.NewGuid():N}.db",
+                Mode = SqliteOpenMode.Memory,
+                Cache = SqliteCacheMode.Shared
+            };
+
             dbCtxBuilder
-                .UseSqlite("FileName=TestContextoLocacaoSalas.db")
+                .UseSqlite(builder.ConnectionString)
                 .EnableSensitiveDataLogging()
                 .UseLoggerFactory(CreateFactory())
                 

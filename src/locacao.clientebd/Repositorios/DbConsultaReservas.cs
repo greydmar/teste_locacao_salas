@@ -17,17 +17,10 @@ namespace mtgroup.locacao.Repositorios
 
         public async Task<bool> ExistePerfilSala(RequisicaoSalaReuniao requisicao)
         {
-            try
-            {
-                return await GetDbSet<PerfilSalaReuniaoInterno>().AnyAsync(
-                    perfil => perfil.QuantidadeAssentos >= requisicao.QuantidadePessoas
-                              && (requisicao.Recursos == RecursoSalaReuniao.Nenhum || (perfil.Recursos & requisicao.Recursos) != 0)
-                );
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return await GetDbSet<PerfilSalaReuniaoInterno>().AnyAsync(
+                perfil => perfil.QuantidadeAssentos >= requisicao.QuantidadePessoas
+                          && (requisicao.Recursos == RecursoSalaReuniao.Nenhum || (perfil.Recursos & requisicao.Recursos) != 0)
+            );
         }
 
         public async Task<IEnumerable<IPerfilSalaReuniao>> ListarSalasDisponiveis(PeriodoLocacao periodo)
@@ -38,11 +31,9 @@ namespace mtgroup.locacao.Repositorios
                 .Where(reserva => reserva.Periodo.Termino > periodo.Inicio)
                 .Select(reserva => reserva.IdSalaReservada);
 
-            var dbgResult = salasDisponiveis
+            return salasDisponiveis
                 .Where(sala => !reservadas.Contains(sala.Identificador))
                 .ToList();
-
-            return dbgResult;
         }
     }
 }

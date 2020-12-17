@@ -17,9 +17,9 @@ namespace mtgroup.locacao.DataContext
             new Lazy<IEnumerable<Solicitante>>(() =>
                 new[]
                 {
-                    new Solicitante("User01"),
-                    new Solicitante("User02"),
-                    new Solicitante("User03")
+                    new Solicitante("Usuario01", 1),
+                    new Solicitante("Usuario02", 2),
+                    new Solicitante("Usuario03", 3)
                 }
             );
 
@@ -76,15 +76,18 @@ namespace mtgroup.locacao.DataContext
         {
             var listaSalas = PerfisSalasDisponiveis;
 
-            return listaSalas.Any(sala =>
+            return listaSalas.Any(perfil =>
             {
-                if (sala.QuantidadeAssentos < req.QuantidadePessoas)
-                    return false;
+                return perfil.QuantidadeAssentos >= req.QuantidadePessoas
+                       && (req.Recursos == RecursoSalaReuniao.Nenhum || (perfil.Recursos & req.Recursos) != 0);
 
-                if (req.Recursos == RecursoSalaReuniao.Nenhum)
-                    return true;
+                //if (sala.QuantidadeAssentos < req.QuantidadePessoas)
+                //    return false;
 
-                return (sala.Recursos & req.Recursos) != 0;
+                //if (req.Recursos == RecursoSalaReuniao.Nenhum)
+                //    return true;
+
+                //return (sala.Recursos & req.Recursos) != 0;
             });
         }
     }

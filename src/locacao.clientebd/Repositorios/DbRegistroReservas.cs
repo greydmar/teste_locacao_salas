@@ -20,7 +20,7 @@ namespace mtgroup.locacao.Repositorios
 
             var entry = await dbReservas.AddAsync(reservaSala);
 
-            DbCtx.SaveChanges();
+            await DbCtx.SaveChangesAsync();
 
             return entry.Entity;
         }
