@@ -1,15 +1,49 @@
 using System;
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using mtgroup.auth.Interfaces;
 
 namespace mtgroup.locacao.Auxiliares
 {
+    internal static class ConfigSerializacaoJson
+    {
+        public static void Setup(JsonSerializerOptions serializerOptions)
+        {
+            serializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            serializerOptions.PropertyNameCaseInsensitive = true;
+            serializerOptions.IgnoreNullValues = true;
+            serializerOptions.Converters.Add(new SimpleTimeSpanConverter());
+
+        }
+
+        public class SimpleTimeSpanConverter : JsonConverter<TimeSpan>
+        {
+            public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                var rawData = reader.GetString();
+                if (string.IsNullOrEmpty(rawData))
+                    return default;
+
+                return TimeSpan.Parse(rawData, CultureInfo.InvariantCulture);
+            }
+
+            public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options)
+            {
+                writer.WriteStringValue(value.ToString("c", CultureInfo.InvariantCulture));
+            }
+        }
+    }
+
+
     public class MiddlewareTokenJwt
     {
         private readonly RequestDelegate _next;

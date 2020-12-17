@@ -106,6 +106,12 @@ namespace mtgroup.locacao.Testes
         [Fact]
         public async Task Chamada_Com_Autenticacao_Aceita()
         {
+            var reqAutenticacao = new RequisicaoAutenticacaoUsuario()
+            {
+                Login = "Usuario01",
+                Senha = "Mudar@123"
+            };
+
             var requisicao = new RequisicaoAgendamento()
             {
                 QuantidadePessoas = 5,
@@ -116,13 +122,6 @@ namespace mtgroup.locacao.Testes
                 HoraInicio = new TimeSpan(0, 13, 50),
                 TvWebCam = false
             };
-
-            var reqAutenticacao = new RequisicaoAutenticacaoUsuario()
-            {
-                Login = "Usuario01",
-                Senha = "Mudar@123"
-            };
-
 
             var uncheckedResponse = await PostAgendamentoComValidacao<RespostaAgendamento>(requisicao, reqAutenticacao);
 

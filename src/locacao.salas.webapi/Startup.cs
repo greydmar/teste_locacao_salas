@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using mtgroup.auth.Interfaces;
+using mtgroup.locacao.Auxiliares;
 using mtgroup.locacao.Servicos;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
@@ -32,11 +34,7 @@ namespace mtgroup.locacao
                 .AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    var jszOptions = options.JsonSerializerOptions;
-
-                    jszOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-                    jszOptions.PropertyNameCaseInsensitive = true;
-                    jszOptions.IgnoreNullValues = true;
+                    ConfigSerializacaoJson.Setup(options.JsonSerializerOptions);
                 });
 
             services
